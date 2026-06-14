@@ -30,23 +30,12 @@ function mapLetter(row) {
 
 function App() {
   const [hasSeenSplash, setHasSeenSplash] = useState(false)
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("forsixteen-user")
+    return savedUser ? JSON.parse(savedUser) : null
+  })
   const [activePage, setActivePage] = useState(0)
   const [letters, setLetters] = useState([])
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user ?? null)
-    })
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
 
   useEffect(() => {
     if (!user) {
@@ -58,6 +47,7 @@ function App() {
       const { data, error } = await supabase
         .from("letters")
         .select("*")
+        .eq("account_name", user.id)
         .order("created_at", { ascending: false })
 
       if (!error) {
@@ -72,7 +62,7 @@ function App() {
     const { data, error } = await supabase
       .from("letters")
       .insert({
-        user_id: user.id,
+        account_name: user.id,
         title,
         text,
         open_date: openDate || null,
@@ -98,11 +88,12 @@ function App() {
 
   function handleLogin(nextUser) {
     setUser(nextUser)
+    localStorage.setItem("forsixteen-user", JSON.stringify(nextUser))
   }
 
-  async function handleLogout() {
-    await supabase.auth.signOut()
+  function handleLogout() {
     setUser(null)
+    localStorage.removeItem("forsixteen-user")
     setLetters([])
     setActivePage(0)
   }

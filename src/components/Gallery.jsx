@@ -38,6 +38,7 @@ function Gallery({ user }) {
       const { data, error } = await supabase
         .from("gallery_memories")
         .select("*")
+        .eq("account_name", user.id)
         .order("created_at", { ascending: false })
 
       if (!error) {
@@ -83,7 +84,7 @@ function Gallery({ user }) {
     const { data, error: insertError } = await supabase
       .from("gallery_memories")
       .insert({
-        user_id: user.id,
+        account_name: user.id,
         title: title.trim() || "Untitled Memory",
         caption: caption.trim(),
         image_url: publicUrlData.publicUrl,

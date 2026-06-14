@@ -1,34 +1,45 @@
 import { useState } from "react"
 
 import bgForSixteen from "../assets/login.jpg"
-import { supabase } from "../lib/supabase"
+
+const premadeAccounts = [
+  {
+    name: "stargirl",
+    passcode: "romakate_16foreverlovewins",
+  },
+  {
+    name: "Roam",
+    passcode: "kateroma_16foreverlovewins",
+  },
+]
 
 function Login({ onLogin }) {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  async function handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault()
     setIsLoading(true)
     setError("")
 
     const formData = new FormData(event.currentTarget)
-    const email = formData.get("starGirl").trim()
-    const passcode = formData.get("romakate_16foreverlovewins").trim()
+    const name = formData.get("name").trim()
+    const passcode = formData.get("passcode").trim()
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password: passcode,
-    })
+    const account = premadeAccounts.find(
+      (account) =>
+        account.name.toLowerCase() === name.toLowerCase() &&
+        account.passcode === passcode,
+    )
 
-    setIsLoading(false)
-
-    if (error) {
-      setError("Wrong email or passcode.")
+    if (!account) {
+      setIsLoading(false)
+      setError("Wrong name or passcode.")
       return
     }
 
-    onLogin(data.user)
+    setIsLoading(false)
+    onLogin({ id: account.name.toLowerCase(), name: account.name })
   }
 
   return (
@@ -52,24 +63,24 @@ function Login({ onLogin }) {
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5" autoComplete="off">
           <label className="block font-mono text-xs font-black uppercase tracking-[0.16em] text-[#838f58]">
-            Email
+            Name
             <input
-              name="forsixteen-email"
-              type="email"
+              name="name"
+              type="text"
               autoComplete="off"
               className="mt-2 w-full border-4 border-[#f9d1d9] bg-white px-4 py-3 font-mono text-sm text-slate-900 outline-none focus:border-[#838f58]"
-              placeholder="you@example.com"
+              placeholder="username"
             />
           </label>
 
           <label className="block font-mono text-xs font-black uppercase tracking-[0.16em] text-[#838f58]">
             Passcode
             <input
-              name="forsixteen-passcode"
+              name="passcode"
               type="password"
               autoComplete="new-password"
               className="mt-2 w-full border-4 border-[#f9d1d9] bg-white px-4 py-3 font-mono text-sm text-slate-900 outline-none focus:border-[#838f58]"
-              placeholder="Passcode"
+              placeholder="password"
             />
           </label>
 
