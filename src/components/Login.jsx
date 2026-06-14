@@ -13,8 +13,8 @@ function Login({ onLogin }) {
     setError("")
 
     const formData = new FormData(event.currentTarget)
-    const email = formData.get("forsixteen-email").trim()
-    const passcode = formData.get("forsixteen-passcode").trim()
+    const email = formData.get("starGirl").trim()
+    const passcode = formData.get("romakate_16foreverlovewins").trim()
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
