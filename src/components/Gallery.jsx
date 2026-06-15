@@ -10,11 +10,48 @@ function formatDate(date) {
   })
 }
 
+function getFileExtension(url) {
+  return url.split("?")[0].split(".").pop()?.toLowerCase() || ""
+}
+
+function getMediaTypeFromUrl(url) {
+  const extension = getFileExtension(url)
+
+  if (["mp3", "m4a", "aac", "wav", "ogg", "flac"].includes(extension)) {
+    return "audio"
+  }
+
+  if (["mp4", "mov", "webm", "m4v"].includes(extension)) {
+    return "video"
+  }
+
+  return "image"
+}
+
+function getAudioMimeType(url) {
+  const extension = getFileExtension(url)
+  const mimeTypes = {
+    aac: "audio/aac",
+    flac: "audio/flac",
+    m4a: "audio/mp4",
+    mp3: "audio/mpeg",
+    ogg: "audio/ogg",
+    wav: "audio/wav",
+  }
+
+  return mimeTypes[extension] || "audio/mpeg"
+}
+
 function mapMemory(row) {
+  const savedMediaType = row.media_type
+
   return {
     id: row.id,
     mediaUrl: row.image_url,
-    mediaType: row.media_type || "image",
+    mediaType:
+      savedMediaType && savedMediaType !== "image"
+        ? savedMediaType
+        : getMediaTypeFromUrl(row.image_url),
     title: row.title,
     caption: row.caption,
     date: formatDate(row.created_at),
@@ -240,11 +277,18 @@ function Gallery({ user }) {
                     <div className="flex h-24 w-24 items-center justify-center border-4 border-[#f9d1d9] bg-white text-5xl shadow-[5px_5px_0_rgba(131,143,88,0.35)]">
                       🎵
                     </div>
-                    <audio
-                      src={memory.mediaUrl}
-                      controls
-                      className="w-full"
-                    />
+                    <audio controls preload="metadata" className="w-full">
+                      <source src={memory.mediaUrl} type={getAudioMimeType(memory.mediaUrl)} />
+                      <a href={memory.mediaUrl}>Open audio</a>
+                    </audio>
+                    <a
+                      href={memory.mediaUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-mono text-[10px] font-black uppercase tracking-[0.14em] text-[#838f58]"
+                    >
+                      Open audio
+                    </a>
                   </div>
                 ) : (
                   <img

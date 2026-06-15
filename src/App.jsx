@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import About from "./components/About"
 import Footer from "./components/Footer"
@@ -57,34 +57,59 @@ function App() {
   const [letters, setLetters] = useState([])
   const [letterError, setLetterError] = useState("")
 
-  useEffect(() => {
+  const loadLetters = useCallback(async () => {
     if (!user) {
       return
     }
 
-    async function loadLetters() {
-      if (!isSupabaseConfigured) {
-        setLetterError("Supabase is not configured on this deployment.")
-        return
-      }
-
-      const { data, error } = await supabase
-        .from("letters")
-        .select("*")
-        .eq("account_name", user.id)
-        .order("created_at", { ascending: false })
-
-      if (error) {
-        setLetterError(`Letters could not load: ${error.message}`)
-        return
-      }
-
-      setLetterError("")
-      setLetters(data.map(mapLetter))
+    if (!isSupabaseConfigured) {
+      setLetterError("Supabase is not configured on this deployment.")
+      return
     }
 
-    loadLetters()
+    const { data, error } = await supabase
+      .from("letters")
+      .select("*")
+      .eq("account_name", user.id)
+      .order("created_at", { ascending: false })
+
+    if (error) {
+      setLetterError(`Letters could not load: ${error.message}`)
+      return
+    }
+
+    setLetterError("")
+    setLetters(data.map(mapLetter))
   }, [user])
+
+  useEffect(() => {
+    const timerId = window.setTimeout(() => {
+      loadLetters()
+    }, 0)
+
+    return () => window.clearTimeout(timerId)
+  }, [loadLetters])
+
+  useEffect(() => {
+    if (activePage === 2) {
+      const timerId = window.setTimeout(() => {
+        loadLetters()
+      }, 0)
+
+      return () => window.clearTimeout(timerId)
+    }
+  }, [activePage, loadLetters])
+
+  useEffect(() => {
+    function refreshLettersOnFocus() {
+      if (activePage === 2) {
+        loadLetters()
+      }
+    }
+
+    window.addEventListener("focus", refreshLettersOnFocus)
+    return () => window.removeEventListener("focus", refreshLettersOnFocus)
+  }, [activePage, loadLetters])
 
   async function handleSaveLetter({ title, text, openDate, openAt, stickers }) {
     setLetterError("")
