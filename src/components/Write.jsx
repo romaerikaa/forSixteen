@@ -51,6 +51,12 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
 }
 
+function getTodayInputDate() {
+  const today = new Date()
+  today.setMinutes(today.getMinutes() - today.getTimezoneOffset())
+  return today.toISOString().slice(0, 10)
+}
+
 function Write({ onSave, error }) {
   const [title, setTitle] = useState("")
   const [letter, setLetter] = useState("")
@@ -60,6 +66,17 @@ function Write({ onSave, error }) {
   const [draggingStickerId, setDraggingStickerId] = useState("")
   const [isSaving, setIsSaving] = useState(false)
   const paperRef = useRef(null)
+  const openDate = openDateTime.slice(0, 10)
+  const openTime = openDateTime.slice(11, 16)
+
+  function updateOpenDateTime(nextDate, nextTime) {
+    if (!nextDate) {
+      setOpenDateTime("")
+      return
+    }
+
+    setOpenDateTime(`${nextDate}T${nextTime || "00:00"}`)
+  }
 
   function getStickerPosition(event) {
     const paper = paperRef.current
@@ -183,11 +200,35 @@ function Write({ onSave, error }) {
                   value={openDateTime}
                   onChange={(event) => setOpenDateTime(event.target.value)}
                   className="
-                    mt-2 block h-[3.5rem] w-full border-4 border-[#f9d1d9] bg-[#fffdf8]
+                    mt-2 hidden h-[3.5rem] min-w-0 w-full appearance-none border-4 border-[#f9d1d9] bg-[#fffdf8]
                     px-4 py-2 font-mono text-sm text-zinc-900 outline-none
-                    focus:border-[#838f58]
+                    focus:border-[#838f58] sm:block
                   "
                 />
+                <div className="mt-2 grid min-w-0 grid-cols-1 gap-2 sm:hidden">
+                  <input
+                    type="date"
+                    value={openDate}
+                    onChange={(event) => updateOpenDateTime(event.target.value, openTime)}
+                    className="
+                      h-14 min-w-0 w-full appearance-none border-4 border-[#f9d1d9] bg-[#fffdf8]
+                      px-3 py-2 font-mono text-base text-zinc-900 outline-none
+                      focus:border-[#838f58]
+                    "
+                  />
+                  <input
+                    type="time"
+                    value={openTime}
+                    onChange={(event) =>
+                      updateOpenDateTime(openDate || getTodayInputDate(), event.target.value)
+                    }
+                    className="
+                      h-14 min-w-0 w-full appearance-none border-4 border-[#f9d1d9] bg-[#fffdf8]
+                      px-3 py-2 font-mono text-base text-zinc-900 outline-none
+                      focus:border-[#838f58]
+                    "
+                  />
+                </div>
                 <span className="mt-2 block text-[10px] tracking-[0.12em] text-zinc-400">
                   Leave blank for anytime
                 </span>
