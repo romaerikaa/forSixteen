@@ -33,7 +33,7 @@ function FirstVisitNotice({ onDismiss }) {
         <p className="letter-words relative z-10 mt-6 whitespace-pre-wrap break-words font-serif text-xl leading-8 text-slate-700 sm:text-2xl sm:leading-10">
           Happy 8th Monthsary baby! I want you to always remember that I love you very much and you're my motivation.
           {"\n\n"}
-          I hope you like this little project I made for you and me, and I hope it can be a nice place for you to keep your precious memories.
+          I hope you like this little project I made for you, and I hope it can be a nice place for you to keep your precious memories.
           {"\n\n"}
           Thank you for being in my life.
         </p>

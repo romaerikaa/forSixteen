@@ -78,6 +78,10 @@ function Write({ onSave, error }) {
     setOpenDateTime(`${nextDate}T${nextTime || "00:00"}`)
   }
 
+  function clearOpenDateTime() {
+    setOpenDateTime("")
+  }
+
   function getStickerPosition(event) {
     const paper = paperRef.current
 
@@ -195,16 +199,24 @@ function Write({ onSave, error }) {
             <div className="grid w-full gap-3 sm:grid-cols-[minmax(15rem,1fr)_auto] sm:items-start lg:w-auto">
               <label className="flex flex-col font-mono text-xs font-black uppercase tracking-[0.16em] text-[#838f58]">
                 Open Time
-                <input
-                  type="datetime-local"
-                  value={openDateTime}
-                  onChange={(event) => setOpenDateTime(event.target.value)}
-                  className="
-                    mt-2 hidden h-[3.5rem] min-w-0 w-full appearance-none border-4 border-[#f9d1d9] bg-[#fffdf8]
-                    px-4 py-2 font-mono text-sm text-zinc-900 outline-none
-                    focus:border-[#838f58] sm:block
-                  "
-                />
+                <div className="relative mt-2 hidden sm:block">
+                  {!openDateTime && (
+                    <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 font-mono text-xs font-black uppercase tracking-[0.12em] text-zinc-400 md:text-sm">
+                      Pick date and time
+                    </span>
+                  )}
+                  <input
+                    type="datetime-local"
+                    value={openDateTime}
+                    onChange={(event) => setOpenDateTime(event.target.value)}
+                    className={`
+                      block h-[3.5rem] min-w-0 w-full appearance-none border-4 border-[#f9d1d9] bg-[#fffdf8]
+                      px-4 py-2 font-mono text-sm outline-none
+                      focus:border-[#838f58]
+                      ${openDateTime ? "text-zinc-900" : "text-transparent"}
+                    `}
+                  />
+                </div>
                 <div className="mt-2 grid min-w-0 grid-cols-1 gap-2 sm:hidden">
                   <div className="relative">
                     {!openDate && (
@@ -245,8 +257,17 @@ function Write({ onSave, error }) {
                     />
                   </div>
                 </div>
-                <span className="mt-2 block text-[10px] tracking-[0.12em] text-zinc-400">
+                <span className="mt-2 flex flex-wrap items-center gap-3 text-[10px] tracking-[0.12em] text-zinc-400">
                   Leave blank for anytime
+                  {openDateTime && (
+                    <button
+                      type="button"
+                      onClick={clearOpenDateTime}
+                      className="font-mono font-black uppercase tracking-[0.14em] text-[#ff4f96] transition hover:text-[#838f58]"
+                    >
+                      Clear time
+                    </button>
+                  )}
                 </span>
               </label>
 
