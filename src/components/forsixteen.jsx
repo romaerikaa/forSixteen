@@ -36,17 +36,17 @@ function ForSixteen({ onNavigate }) {
             </p>
           </section>
 
-          <section className="home-collage relative mx-auto h-[20rem] w-full max-w-xl sm:h-[25rem] lg:h-[27rem] lg:max-w-none" aria-label="Photo collage">
-            <figure className="home-photo home-photo-one absolute left-[5%] top-[5%] z-20 h-[8.5rem] w-[13rem] rotate-[-10deg] sm:h-[11rem] sm:w-[17rem] lg:left-[1%] lg:w-[18rem]">
+          <section className="home-collage relative mx-auto h-[18rem] w-full max-w-xl overflow-visible sm:h-[25rem] lg:h-[27rem] lg:max-w-none" aria-label="Photo collage">
+            <figure className="home-photo home-photo-one absolute left-[2%] top-[6%] z-20 h-[7.2rem] w-[10.6rem] rotate-[-8deg] sm:left-[5%] sm:top-[5%] sm:h-[11rem] sm:w-[17rem] sm:rotate-[-10deg] lg:left-[1%] lg:w-[18rem]">
               <img src={photoSeven} alt="" className="h-full w-full object-contain" />
             </figure>
-            <figure className="home-photo home-photo-two absolute right-[3%] top-[2%] z-10 h-[8rem] w-[12rem] rotate-[5deg] sm:h-[10rem] sm:w-[16rem] lg:w-[17rem]">
+            <figure className="home-photo home-photo-two absolute right-[1%] top-[3%] z-10 h-[7rem] w-[10.4rem] rotate-[5deg] sm:right-[3%] sm:top-[2%] sm:h-[10rem] sm:w-[16rem] lg:w-[17rem]">
               <img src={photoNine} alt="" className="h-full w-full object-contain" />
             </figure>
-            <figure className="home-photo home-photo-three absolute bottom-[20%] left-[15%] z-30 h-[8.25rem] w-[12.5rem] rotate-[2deg] sm:h-[10.5rem] sm:w-[16rem]">
+            <figure className="home-photo home-photo-three absolute bottom-[20%] left-[14%] z-30 h-[7.4rem] w-[11rem] rotate-[2deg] sm:h-[10.5rem] sm:w-[16rem]">
               <img src={photoEight} alt="" className="h-full w-full object-contain" />
             </figure>
-            <figure className="home-photo home-photo-four absolute bottom-[8%] right-[8%] z-20 h-[8rem] w-[12rem] rotate-[-1deg] sm:h-[10rem] sm:w-[15rem]">
+            <figure className="home-photo home-photo-four absolute bottom-[2%] right-[4%] z-20 h-[6.8rem] w-[10rem] rotate-[-1deg] sm:bottom-[8%] sm:right-[8%] sm:h-[10rem] sm:w-[15rem]">
               <img src={photoSix} alt="" className="h-full w-full object-contain" />
             </figure>
           </section>
