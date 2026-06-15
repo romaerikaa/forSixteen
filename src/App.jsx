@@ -50,6 +50,10 @@ function getAccountNames(user) {
   )
 }
 
+function getSharedLetterAccountNames(user) {
+  return Array.from(new Set([...getAccountNames(user), "stargirl", "Roam", "roam"]))
+}
+
 function App() {
   const [hasSeenSplash, setHasSeenSplash] = useState(false)
   const [showFirstVisitNotice, setShowFirstVisitNotice] = useState(() => {
@@ -79,7 +83,7 @@ function App() {
     const { data, error } = await supabase
       .from("letters")
       .select("*")
-      .in("account_name", getAccountNames(user))
+      .in("account_name", getSharedLetterAccountNames(user))
       .order("created_at", { ascending: false })
 
     setIsLoadingLetters(false)
