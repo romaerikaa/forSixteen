@@ -161,7 +161,7 @@ function OpenEnvelope({ letter, onClose }) {
   )
 }
 
-function Vault({ letters }) {
+function Vault({ letters, error, isRefreshing, onRefresh, user }) {
   const [openLetter, setOpenLetter] = useState(null)
   const [currentTime, setCurrentTime] = useState(() => Date.now())
 
@@ -180,10 +180,27 @@ function Vault({ letters }) {
           Vault
         </h1>
 
+        <div className="mx-auto mt-6 flex max-w-7xl flex-col items-center gap-3 px-0 sm:px-4">
+          <button
+            type="button"
+            onClick={onRefresh}
+            disabled={isRefreshing}
+            className="border-4 border-[#838f58] bg-[#f9d1d9] px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.16em] text-slate-900 shadow-[4px_4px_0_rgba(131,143,88,0.55)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+          >
+            {isRefreshing ? "Refreshing..." : "Refresh Letters"}
+          </button>
+
+          {error && (
+            <p className="w-full border-4 border-[#f9d1d9] bg-[#fffdf8] px-4 py-3 text-center font-mono text-xs font-bold uppercase tracking-[0.14em] text-rose-500">
+              {error}
+            </p>
+          )}
+        </div>
+
         <div className="mx-auto mt-10 grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-0 sm:grid-cols-2 sm:px-4 lg:grid-cols-4">
           {letters.length === 0 ? (
             <div className="col-span-full mx-auto border border-slate-300 bg-[#fbfaf5] p-8 font-mono text-slate-500 shadow-[10px_12px_0_rgba(148,163,184,0.45)]">
-              No saved letters yet.
+              No saved letters yet for {user?.name || "this account"}.
             </div>
           ) : (
             letters.map((letter) => (

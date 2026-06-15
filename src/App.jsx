@@ -44,6 +44,12 @@ function createLocalLetter({ title, text, openDate, openAt, stickers }) {
   }
 }
 
+function getAccountNames(user) {
+  return Array.from(
+    new Set([user.id, user.name, user.id?.toLowerCase(), user.name?.toLowerCase()].filter(Boolean)),
+  )
+}
+
 function App() {
   const [hasSeenSplash, setHasSeenSplash] = useState(false)
   const [showFirstVisitNotice, setShowFirstVisitNotice] = useState(() => {
@@ -56,6 +62,7 @@ function App() {
   const [activePage, setActivePage] = useState(0)
   const [letters, setLetters] = useState([])
   const [letterError, setLetterError] = useState("")
+  const [isLoadingLetters, setIsLoadingLetters] = useState(false)
 
   const loadLetters = useCallback(async () => {
     if (!user) {
@@ -67,11 +74,15 @@ function App() {
       return
     }
 
+    setIsLoadingLetters(true)
+
     const { data, error } = await supabase
       .from("letters")
       .select("*")
-      .eq("account_name", user.id)
+      .in("account_name", getAccountNames(user))
       .order("created_at", { ascending: false })
+
+    setIsLoadingLetters(false)
 
     if (error) {
       setLetterError(`Letters could not load: ${error.message}`)
@@ -165,7 +176,13 @@ function App() {
   const pages = [
     <ForSixteen onNavigate={setActivePage} />,
     <Write onSave={handleSaveLetter} error={letterError} />,
-    <Vault letters={letters} />,
+    <Vault
+      letters={letters}
+      error={letterError}
+      isRefreshing={isLoadingLetters}
+      onRefresh={loadLetters}
+      user={user}
+    />,
     <Gallery user={user} />,
     <About />,
   ]
