@@ -133,14 +133,26 @@ function OpenEnvelope({ letter, onClose }) {
         </div>
 
         <div className="absolute inset-x-0 top-4 z-40 flex justify-center px-0 sm:px-6">
-          <div className="letter-paper min-h-[30rem] w-[94vw] max-w-[70rem] bg-[#fbfaf5] px-5 pb-9 pt-14 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[39rem] sm:w-[82vw] sm:px-12 sm:pb-12 sm:pt-16">
+          <div className="letter-paper relative min-h-[30rem] w-[94vw] max-w-[70rem] bg-[#fbfaf5] px-5 pb-9 pt-14 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[39rem] sm:w-[82vw] sm:px-12 sm:pb-12 sm:pt-16">
             <div className="absolute left-0 right-0 top-0 h-10 bg-gradient-to-b from-white/70 to-transparent" />
-            <h2 className="letter-words mb-6 break-words font-mono text-2xl font-black uppercase tracking-[0.12em] text-slate-600 sm:mb-8 sm:text-3xl sm:tracking-[0.16em]">
+            <h2 className="letter-words relative z-10 mb-6 break-words font-mono text-2xl font-black uppercase tracking-[0.12em] text-slate-600 sm:mb-8 sm:text-3xl sm:tracking-[0.16em]">
               {letter.title || "Untitled Letter"}
             </h2>
-            <p className="letter-words whitespace-pre-wrap break-words font-serif text-xl leading-8 text-slate-700 sm:text-2xl sm:leading-10">
+            <p className="letter-words relative z-10 whitespace-pre-wrap break-words font-serif text-xl leading-8 text-slate-700 sm:text-2xl sm:leading-10">
               {letter.text}
             </p>
+            <div className="pointer-events-none absolute inset-0 z-20">
+              {(letter.stickers || []).map((sticker) => (
+                <span
+                  key={sticker.id}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 select-none text-4xl drop-shadow-[0_5px_4px_rgba(15,23,42,0.22)] sm:text-5xl"
+                  style={{ left: `${sticker.x}%`, top: `${sticker.y}%` }}
+                  aria-hidden="true"
+                >
+                  {sticker.emoji}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -162,7 +174,7 @@ function Vault({ letters }) {
   }, [])
 
   return (
-    <section className="vault-enter min-h-screen bg-[#eef2f5] px-4 pb-10 pt-28 vault-grid sm:px-6 sm:pb-14 sm:pt-36 xl:pt-44">
+    <section className="vault-enter min-h-screen bg-[#f5f6f0] px-4 pb-10 pt-28 vault-grid sm:px-6 sm:pb-14 sm:pt-36 xl:pt-44">
       <div className="mx-auto w-full">
         <h1 className="text-center font-mono text-2xl font-black uppercase tracking-[0.16em] text-slate-500 sm:text-3xl sm:tracking-[0.18em]">
           Vault

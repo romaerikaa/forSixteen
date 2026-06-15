@@ -5,6 +5,7 @@ create table if not exists letters (
   text text not null,
   open_date date,
   open_at timestamp with time zone,
+  stickers jsonb default '[]'::jsonb,
   created_at timestamp with time zone default now() not null
 );
 
@@ -14,12 +15,15 @@ create table if not exists gallery_memories (
   title text not null,
   caption text,
   image_url text not null,
+  media_type text default 'image' not null,
   created_at timestamp with time zone default now() not null
 );
 
 alter table letters add column if not exists account_name text;
 alter table letters add column if not exists open_at timestamp with time zone;
+alter table letters add column if not exists stickers jsonb default '[]'::jsonb;
 alter table gallery_memories add column if not exists account_name text;
+alter table gallery_memories add column if not exists media_type text default 'image' not null;
 
 alter table letters enable row level security;
 alter table gallery_memories enable row level security;

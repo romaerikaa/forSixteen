@@ -13,17 +13,19 @@ function formatDate(date) {
 function mapMemory(row) {
   return {
     id: row.id,
-    image: row.image_url,
+    mediaUrl: row.image_url,
+    mediaType: row.media_type || "image",
     title: row.title,
     caption: row.caption,
     date: formatDate(row.created_at),
   }
 }
 
-function createLocalMemory({ imageUrl, title, caption }) {
+function createLocalMemory({ mediaUrl, mediaType, title, caption }) {
   return {
     id: crypto.randomUUID(),
-    image: imageUrl,
+    mediaUrl,
+    mediaType,
     title,
     caption,
     date: formatDate(new Date().toISOString()),
@@ -34,7 +36,7 @@ function Gallery({ user }) {
   const [memories, setMemories] = useState([])
   const [title, setTitle] = useState("")
   const [caption, setCaption] = useState("")
-  const [imageFile, setImageFile] = useState(null)
+  const [mediaFile, setMediaFile] = useState(null)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState("")
 
@@ -67,15 +69,15 @@ function Gallery({ user }) {
     loadMemories()
   }, [user])
 
-  function handleImageChange(event) {
+  function handleMediaChange(event) {
     const file = event.target.files?.[0]
-    setImageFile(file || null)
+    setMediaFile(file || null)
   }
 
   async function handleSave(event) {
     event.preventDefault()
 
-    if (!imageFile) {
+    if (!mediaFile) {
       return
     }
 
@@ -90,15 +92,18 @@ function Gallery({ user }) {
       return
     }
 
-    const fileExtension = imageFile.name.split(".").pop()
+    const mediaType = mediaFile.type.startsWith("video/") ? "video" : "image"
+    const fileExtension = mediaFile.name.split(".").pop()
     const filePath = `${user.id}/${crypto.randomUUID()}.${fileExtension}`
 
     const { error: uploadError } = await supabase.storage
       .from("gallery")
-      .upload(filePath, imageFile)
+      .upload(filePath, mediaFile, {
+        contentType: mediaFile.type,
+      })
 
     if (uploadError) {
-      setError(`Photo upload failed: ${uploadError.message}`)
+      setError(`Memory upload failed: ${uploadError.message}`)
       setIsSaving(false)
       return
     }
@@ -117,6 +122,7 @@ function Gallery({ user }) {
         title: memoryTitle,
         caption: memoryCaption,
         image_url: publicUrlData.publicUrl,
+        media_type: mediaType,
       })
 
     setIsSaving(false)
@@ -128,7 +134,8 @@ function Gallery({ user }) {
 
     setMemories((currentMemories) => [
       createLocalMemory({
-        imageUrl: publicUrlData.publicUrl,
+        mediaUrl: publicUrlData.publicUrl,
+        mediaType,
         title: memoryTitle,
         caption: memoryCaption,
       }),
@@ -136,7 +143,7 @@ function Gallery({ user }) {
     ])
     setTitle("")
     setCaption("")
-    setImageFile(null)
+    setMediaFile(null)
     event.target.reset()
   }
 
@@ -159,18 +166,18 @@ function Gallery({ user }) {
           >
             <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
               <label className="font-mono text-xs font-black uppercase tracking-[0.16em] text-[#838f58]">
-                Photo
+                Photo / Video
                 <input
                   type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
+                  accept="image/*,video/*"
+                  onChange={handleMediaChange}
                   className="mt-2 block w-full max-w-full overflow-hidden font-mono text-xs text-slate-600 outline-none transition file:mr-3 file:cursor-pointer file:border-0 file:bg-[#ff7faf] file:px-3 file:py-2 file:font-mono file:font-black file:uppercase file:tracking-[0.1em] file:text-slate-950 file:shadow-[4px_4px_0_rgba(131,143,88,0.55)] file:transition hover:file:-translate-y-0.5 hover:file:bg-[#ff5f9b] focus-visible:ring-4 focus-visible:ring-[#ff9fc3] active:file:translate-x-0.5 active:file:translate-y-0.5 active:file:shadow-[2px_2px_0_rgba(131,143,88,0.7)] sm:text-sm sm:file:mr-4 sm:file:px-4 sm:file:tracking-[0.12em]"
                 />
               </label>
 
               <button
                 type="submit"
-                disabled={!imageFile || isSaving}
+                disabled={!mediaFile || isSaving}
                 className="w-full self-end border-4 border-[#838f58] bg-[#f9d1d9] px-6 py-3 font-mono text-sm font-black uppercase tracking-[0.16em] text-slate-900 shadow-[5px_5px_0_rgba(131,143,88,0.55)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0 sm:w-auto"
               >
                 {isSaving ? "Saving..." : "Save"}
@@ -218,11 +225,19 @@ function Gallery({ user }) {
                 }`}
               >
                 <div className="absolute left-1/2 top-0 h-8 w-24 -translate-x-1/2 -translate-y-1/2 rotate-2 bg-[#f9d1d9]/70 shadow-sm" />
-                <img
-                  src={memory.image}
-                  alt=""
-                  className="aspect-square w-full object-cover"
-                />
+                {memory.mediaType === "video" ? (
+                  <video
+                    src={memory.mediaUrl}
+                    controls
+                    className="aspect-square w-full bg-slate-950 object-cover"
+                  />
+                ) : (
+                  <img
+                    src={memory.mediaUrl}
+                    alt=""
+                    className="aspect-square w-full object-cover"
+                  />
+                )}
                 <h2 className="mt-5 truncate font-mono text-sm font-black uppercase tracking-[0.14em] text-[#838f58]">
                   {memory.title}
                 </h2>

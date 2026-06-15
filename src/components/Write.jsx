@@ -1,10 +1,123 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
+
+import ribbonImage from "../assets/ribbon.png"
+
+const stickerChoices = [
+  "💖",
+  "💕",
+  "💗",
+  "💘",
+  "💌",
+  "😉",
+  "😘",
+  "🤗",
+  "🤓",
+  "🫰",
+  "⭐",
+  "🌟",
+  "✨",
+  "🌙",
+  "☁️",
+  "🌈",
+  "🎀",
+  "🎗️",
+  "🌷",
+  "🌸",
+  "🌺",
+  "🌻",
+  "🦋",
+  "🍓",
+  "🍒",
+  "🍰",
+  "🍬",
+  "🧸",
+  "📷",
+  "🎧",
+  "🎵",
+  "🎨",
+  "✉️",
+  "📝",
+  "🔒",
+  "🗝️",
+  "💐",
+  "🕯️",
+  "🪄",
+  "👑",
+  "💎",
+  "🫶",
+]
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max)
+}
 
 function Write({ onSave, error }) {
   const [title, setTitle] = useState("")
   const [letter, setLetter] = useState("")
   const [openDateTime, setOpenDateTime] = useState("")
+  const [stickers, setStickers] = useState([])
+  const [isStickerTrayOpen, setIsStickerTrayOpen] = useState(false)
+  const [draggingStickerId, setDraggingStickerId] = useState("")
   const [isSaving, setIsSaving] = useState(false)
+  const paperRef = useRef(null)
+
+  function getStickerPosition(event) {
+    const paper = paperRef.current
+
+    if (!paper) {
+      return { x: 50, y: 50 }
+    }
+
+    const bounds = paper.getBoundingClientRect()
+    const x = ((event.clientX - bounds.left) / bounds.width) * 100
+    const y = ((event.clientY - bounds.top) / bounds.height) * 100
+
+    return {
+      x: clamp(x, 4, 96),
+      y: clamp(y, 4, 96),
+    }
+  }
+
+  function addSticker(emoji) {
+    setStickers((currentStickers) => [
+      ...currentStickers,
+      {
+        id: crypto.randomUUID(),
+        emoji,
+        x: clamp(48 + currentStickers.length * 5, 10, 90),
+        y: clamp(34 + currentStickers.length * 5, 12, 88),
+      },
+    ])
+  }
+
+  function moveSticker(stickerId, event) {
+    const nextPosition = getStickerPosition(event)
+
+    setStickers((currentStickers) =>
+      currentStickers.map((sticker) =>
+        sticker.id === stickerId ? { ...sticker, ...nextPosition } : sticker,
+      ),
+    )
+  }
+
+  function handleStickerPointerDown(stickerId, event) {
+    event.preventDefault()
+    event.currentTarget.setPointerCapture?.(event.pointerId)
+    setDraggingStickerId(stickerId)
+    moveSticker(stickerId, event)
+  }
+
+  function handleStickerPointerMove(event) {
+    if (!draggingStickerId) {
+      return
+    }
+
+    moveSticker(draggingStickerId, event)
+  }
+
+  function stopDragging() {
+    setDraggingStickerId("")
+  }
 
   async function handleSave() {
     const trimmedTitle = title.trim()
@@ -20,6 +133,7 @@ function Write({ onSave, error }) {
       text: trimmedLetter,
       openDate: "",
       openAt: openDateTime ? new Date(openDateTime).toISOString() : "",
+      stickers,
     })
     setIsSaving(false)
 
@@ -27,6 +141,8 @@ function Write({ onSave, error }) {
       setTitle("")
       setLetter("")
       setOpenDateTime("")
+      setStickers([])
+      setIsStickerTrayOpen(false)
     }
   }
 
@@ -42,6 +158,10 @@ function Write({ onSave, error }) {
     >
       <div className="mx-auto max-w-6xl border-4 border-[#f9d1d9] bg-[#fffdf8] shadow-[6px_6px_0_rgba(131,143,88,0.65)] sm:shadow-[10px_10px_0_rgba(131,143,88,0.65)]">
         <div
+          ref={paperRef}
+          onPointerMove={handleStickerPointerMove}
+          onPointerUp={stopDragging}
+          onPointerCancel={stopDragging}
           className="
             relative min-h-[30rem] px-5 py-7 sm:min-h-[34rem] sm:px-14 sm:py-10
             bg-[linear-gradient(to_bottom,transparent_31px,#d8dee6_32px)]
@@ -89,6 +209,64 @@ function Write({ onSave, error }) {
                 >
                   {isSaving ? "Saving..." : "Save"}
                 </button>
+
+                <div className="relative z-50 mt-4 inline-flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsStickerTrayOpen((isOpen) => !isOpen)}
+                    className="
+                      h-11 w-full border-4 border-[#ff6ea8] bg-[#f9d1d9] px-5 font-mono text-xs font-black
+                      uppercase tracking-[0.16em] text-zinc-900 shadow-[3px_3px_0_rgba(131,143,88,0.45)]
+                      transition hover:-translate-y-0.5 hover:bg-[#f7c4cf] sm:w-auto
+                    "
+                    aria-expanded={isStickerTrayOpen}
+                  >
+                    Stickers
+                  </button>
+
+                  {isStickerTrayOpen && (
+                    <div className="absolute right-0 top-14 w-[min(82vw,24rem)] border-4 border-[#f9d1d9] bg-[#fffaf6] p-4 shadow-[7px_7px_0_rgba(131,143,88,0.55)]">
+                      <img
+                        src={ribbonImage}
+                        alt=""
+                        className="pointer-events-none absolute -right-10 -top-9 w-20 rotate-15 drop-shadow-[0_6px_5px_rgba(190,70,112,0.2)]"
+                      />
+
+                      <div className="mb-3 flex items-center justify-between gap-3 border-b-4 border-[#f9d1d9] pb-3 pr-20">
+                        <p className="font-mono text-xs font-black uppercase tracking-[0.18em] text-[#838f58]">
+                          Pick Sticker
+                        </p>
+                        {stickers.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setStickers([])}
+                            className="font-mono text-[10px] font-black uppercase tracking-[0.14em] text-[#ff4f96] transition hover:text-[#838f58]"
+                          >
+                            Clear
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid max-h-72 grid-cols-6 gap-2 overflow-y-auto pr-1 sm:grid-cols-8">
+                        {stickerChoices.map((emoji) => (
+                          <button
+                            key={emoji}
+                            type="button"
+                            onClick={() => addSticker(emoji)}
+                            className="
+                              flex aspect-square items-center justify-center border-2 border-[#f9d1d9] bg-white
+                              text-2xl shadow-[2px_2px_0_rgba(131,143,88,0.32)]
+                              transition hover:-translate-y-0.5 hover:border-[#ff6ea8] hover:bg-[#fff1f6]
+                            "
+                            aria-label={`Add ${emoji} sticker`}
+                          >
+                            {emoji}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -123,6 +301,32 @@ function Write({ onSave, error }) {
             "
             placeholder="Start writing here..."
           />
+
+          <div className="pointer-events-none absolute inset-0 z-30">
+            {stickers.map((sticker) => (
+              <button
+                key={sticker.id}
+                type="button"
+                onPointerDown={(event) => handleStickerPointerDown(sticker.id, event)}
+                onPointerUp={stopDragging}
+                onPointerCancel={stopDragging}
+                onDoubleClick={() =>
+                  setStickers((currentStickers) =>
+                    currentStickers.filter((currentSticker) => currentSticker.id !== sticker.id),
+                  )
+                }
+                className="
+                  pointer-events-auto absolute flex h-12 w-12 -translate-x-1/2 -translate-y-1/2
+                  touch-none select-none items-center justify-center text-4xl drop-shadow-[0_5px_4px_rgba(15,23,42,0.22)]
+                  transition hover:scale-110 sm:h-14 sm:w-14 sm:text-5xl
+                "
+                style={{ left: `${sticker.x}%`, top: `${sticker.y}%` }}
+                aria-label={`Move ${sticker.emoji} sticker`}
+              >
+                {sticker.emoji}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -25,17 +25,19 @@ function mapLetter(row) {
     text: row.text,
     openDate: row.open_date || "",
     openAt: row.open_at || "",
+    stickers: Array.isArray(row.stickers) ? row.stickers : [],
     date: formatDate(row.created_at),
   }
 }
 
-function createLocalLetter({ title, text, openDate, openAt }) {
+function createLocalLetter({ title, text, openDate, openAt, stickers }) {
   return {
     id: crypto.randomUUID(),
     title,
     text,
     openDate: openDate || "",
     openAt: openAt || "",
+    stickers: Array.isArray(stickers) ? stickers : [],
     date: formatDate(new Date().toISOString()),
   }
 }
@@ -79,7 +81,7 @@ function App() {
     loadLetters()
   }, [user])
 
-  async function handleSaveLetter({ title, text, openDate, openAt }) {
+  async function handleSaveLetter({ title, text, openDate, openAt, stickers }) {
     setLetterError("")
 
     if (!isSupabaseConfigured) {
@@ -95,9 +97,14 @@ function App() {
       text,
       open_date: openDate || null,
     }
+    const hasStickers = Array.isArray(stickers) && stickers.length > 0
 
     if (openAt) {
       letterData.open_at = openAt
+    }
+
+    if (hasStickers) {
+      letterData.stickers = stickers
     }
 
     const { error } = await supabase.from("letters").insert(letterData)
@@ -105,16 +112,20 @@ function App() {
     if (error) {
       const needsOpenAtColumn =
         openAt && error.message.toLowerCase().includes("open_at")
+      const needsStickersColumn =
+        hasStickers && error.message.toLowerCase().includes("stickers")
       setLetterError(
         needsOpenAtColumn
           ? "Letter save failed: run the updated Supabase SQL first so timed locks can save."
+          : needsStickersColumn
+          ? "Letter save failed: run the updated Supabase SQL first so stickers can save."
           : `Letter save failed: ${error.message}`,
       )
       return false
     }
 
     setLetters((currentLetters) => [
-      createLocalLetter({ title, text, openDate, openAt }),
+      createLocalLetter({ title, text, openDate, openAt, stickers }),
       ...currentLetters,
     ])
     setActivePage(2)
