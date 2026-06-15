@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 
 import About from "./components/About"
+import Footer from "./components/Footer"
 import Login from "./components/Login"
 import Navbar from "./components/Navbar"
 import ForSixteen from "./components/forsixteen"
@@ -166,6 +167,7 @@ function App() {
         <Navbar activeIndex={activePage} onSelect={setActivePage} onLogout={handleLogout} />
       </div>
       {pages[activePage]}
+      <Footer />
     </div>
   )
 }

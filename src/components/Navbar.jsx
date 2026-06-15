@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 const navItems = [
   { title: "FORSIXTEEN", shortTitle: "FORSIXTEEN", subtitle: "LETTERS + MEMORIES" },
   { title: "WRITE", shortTitle: "WRITE", subtitle: "NEW LETTER" },
@@ -7,14 +9,78 @@ const navItems = [
 ]
 
 function Navbar({ activeIndex, onSelect, onLogout }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  function handleSelect(index) {
+    onSelect(index)
+    setIsMenuOpen(false)
+  }
+
+  function handleLogout() {
+    onLogout()
+    setIsMenuOpen(false)
+  }
+
   return (
-    <nav className="relative w-full overflow-hidden px-2 py-3 sm:px-4 sm:py-5 xl:py-6">
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-5 items-stretch border-4 border-[#ff7faf] bg-[#ff7faf] shadow-[4px_4px_0_rgba(0,0,0,0.72),4px_8px_14px_rgba(0,0,0,0.2)] sm:shadow-[7px_7px_0_rgba(0,0,0,0.78),7px_12px_18px_rgba(0,0,0,0.24)] xl:shadow-[10px_10px_0_rgba(0,0,0,0.82),10px_18px_22px_rgba(0,0,0,0.3)]">
+    <nav className="relative w-full overflow-visible px-3 py-3 md:px-4 md:py-5 xl:py-6">
+      <div className="relative z-30 mx-auto flex w-full max-w-7xl items-center justify-between border-4 border-[#ff7faf] bg-[#fff7fb] px-4 py-3 shadow-[4px_4px_0_rgba(0,0,0,0.72),4px_8px_14px_rgba(0,0,0,0.2)] md:hidden">
+        <button
+          type="button"
+          onClick={() => handleSelect(activeIndex)}
+          className="min-w-0 text-left font-mono text-sm font-black uppercase tracking-[0.12em] text-zinc-950"
+        >
+          {navItems[activeIndex].title}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+          className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 border-4 border-[#ff7faf] bg-[#f9d1d9] shadow-[3px_3px_0_rgba(131,143,88,0.45)]"
+          aria-label="Open navigation menu"
+          aria-expanded={isMenuOpen}
+        >
+          <span className="h-1 w-6 bg-zinc-950" />
+          <span className="h-1 w-6 bg-zinc-950" />
+          <span className="h-1 w-6 bg-zinc-950" />
+        </button>
+      </div>
+
+      {isMenuOpen && (
+        <div className="absolute left-3 right-3 top-[4.9rem] z-20 border-4 border-[#ff7faf] bg-[#ff7faf] shadow-[4px_4px_0_rgba(0,0,0,0.72)] md:hidden">
+          {navItems.map((item, index) => (
+            <button
+              key={item.title}
+              type="button"
+              onClick={() => handleSelect(index)}
+              className={`flex w-full items-center justify-between border-b-4 border-[#ff7faf] bg-[#fff7fb] px-4 py-4 text-left transition last:border-b-0 hover:bg-[#ffe1ec] ${
+                activeIndex === index ? "bg-[#ffd0e1]" : ""
+              }`}
+            >
+              <span className="font-mono text-sm font-black uppercase tracking-[0.12em] text-zinc-950">
+                {item.title}
+              </span>
+              <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-zinc-500">
+                {item.subtitle}
+              </span>
+            </button>
+          ))}
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="w-full bg-[#fffdf8] px-4 py-4 text-left font-mono text-sm font-black uppercase tracking-[0.14em] text-[#838f58] transition hover:bg-[#f9d1d9]"
+          >
+            Logout
+          </button>
+        </div>
+      )}
+
+      <div className="relative z-10 mx-auto hidden w-full max-w-7xl grid-cols-5 items-stretch border-4 border-[#ff7faf] bg-[#ff7faf] shadow-[4px_4px_0_rgba(0,0,0,0.72),4px_8px_14px_rgba(0,0,0,0.2)] md:grid sm:shadow-[7px_7px_0_rgba(0,0,0,0.78),7px_12px_18px_rgba(0,0,0,0.24)] xl:shadow-[10px_10px_0_rgba(0,0,0,0.82),10px_18px_22px_rgba(0,0,0,0.3)]">
         {navItems.map((item, index) => (
           <button
             key={index}
             type="button"
-            onClick={() => onSelect(index)}
+            onClick={() => handleSelect(index)}
             aria-current={activeIndex === index ? "page" : undefined}
             className={`
               nav-card group relative h-16 min-w-0 overflow-hidden border-r-4
@@ -49,8 +115,8 @@ function Navbar({ activeIndex, onSelect, onLogout }) {
       </div>
       <button
         type="button"
-        onClick={onLogout}
-        className="absolute right-3 top-3 z-20 border border-[#838f58] bg-[#fffdf8]/95 px-3 py-2 font-mono text-[10px] font-black uppercase tracking-[0.14em] text-[#838f58] shadow-[3px_3px_0_rgba(131,143,88,0.35)] transition hover:-translate-y-0.5 hover:bg-[#f9d1d9] sm:right-5 sm:top-5 sm:text-xs xl:top-6"
+        onClick={handleLogout}
+        className="absolute right-3 top-3 z-20 hidden border border-[#838f58] bg-[#fffdf8]/95 px-3 py-2 font-mono text-[10px] font-black uppercase tracking-[0.14em] text-[#838f58] shadow-[3px_3px_0_rgba(131,143,88,0.35)] transition hover:-translate-y-0.5 hover:bg-[#f9d1d9] md:block sm:right-5 sm:top-5 sm:text-xs xl:top-6"
       >
         Logout
       </button>
