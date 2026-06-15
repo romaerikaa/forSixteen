@@ -118,6 +118,8 @@ function OpenEnvelope({ letter, onClose }) {
         year: "numeric",
       })
     : "Anytime"
+  const scaledPaperHeight = paperLayout.height * paperLayout.scale
+  const frameHeight = Math.max(544, scaledPaperHeight + 32)
 
   useLayoutEffect(() => {
     const previousBodyOverflow = document.body.style.overflow
@@ -190,7 +192,11 @@ function OpenEnvelope({ letter, onClose }) {
         aria-label="Close letter"
       />
 
-      <div ref={frameRef} className="letter-modal-frame envelope-scene relative min-h-[34rem] sm:h-[42rem]">
+      <div
+        ref={frameRef}
+        className="letter-modal-frame envelope-scene relative"
+        style={{ minHeight: `${frameHeight}px` }}
+      >
         <button
           type="button"
           onClick={onClose}
@@ -224,46 +230,46 @@ function OpenEnvelope({ letter, onClose }) {
           <div
             className="relative"
             style={{
-              height: `${paperLayout.height * paperLayout.scale}px`,
+              height: `${scaledPaperHeight}px`,
               width: `${savedLetterPaperWidth * paperLayout.scale}px`,
             }}
           >
-          <div
-            ref={paperRef}
-            className="letter-paper saved-letter-paper relative min-h-[30rem] bg-[#fbfaf5] px-5 py-7 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[34rem] sm:px-14 sm:py-10"
-            style={{
-              transform: `scale(${paperLayout.scale})`,
-              transformOrigin: "top left",
-              width: `${savedLetterPaperWidth}px`,
-            }}
-          >
-            <div className="absolute left-0 right-0 top-0 h-10 bg-gradient-to-b from-white/70 to-transparent" />
-            <div className="absolute bottom-0 left-4 top-0 w-px bg-[#f9b8c4] sm:left-9" />
-            <div className="relative">
-              <h2 className="letter-words relative z-10 mb-2 break-words font-mono text-xl font-black uppercase tracking-[0.1em] text-[#838f58] sm:text-2xl sm:tracking-[0.14em]">
-                {letter.title || "Untitled Letter"}
-              </h2>
-              <p className="letter-words relative z-10 min-h-[20rem] whitespace-pre-wrap break-words font-mono text-base leading-8 text-zinc-800 sm:min-h-[24rem] sm:text-lg">
-                {letter.text}
-              </p>
-              <div className="letter-words pointer-events-none absolute inset-0 z-20">
-                {(letter.stickers || []).map((sticker) => {
-                  const position = getLetterStickerPosition(sticker)
+            <div
+              ref={paperRef}
+              className="letter-paper saved-letter-paper relative min-h-[30rem] bg-[#fbfaf5] px-5 py-7 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[34rem] sm:px-14 sm:py-10"
+              style={{
+                transform: `scale(${paperLayout.scale})`,
+                transformOrigin: "top left",
+                width: `${savedLetterPaperWidth}px`,
+              }}
+            >
+              <div className="absolute left-0 right-0 top-0 h-10 bg-gradient-to-b from-white/70 to-transparent" />
+              <div className="absolute bottom-0 left-4 top-0 w-px bg-[#f9b8c4] sm:left-9" />
+              <div className="relative">
+                <h2 className="letter-words relative z-10 mb-2 break-words font-mono text-xl font-black uppercase tracking-[0.1em] text-[#838f58] sm:text-2xl sm:tracking-[0.14em]">
+                  {letter.title || "Untitled Letter"}
+                </h2>
+                <p className="letter-words relative z-10 min-h-[20rem] whitespace-pre-wrap break-words font-mono text-base leading-8 text-zinc-800 sm:min-h-[24rem] sm:text-lg">
+                  {letter.text}
+                </p>
+                <div className="letter-words pointer-events-none absolute inset-0 z-20">
+                  {(letter.stickers || []).map((sticker) => {
+                    const position = getLetterStickerPosition(sticker)
 
-                  return (
-                    <span
-                      key={sticker.id}
-                      className="absolute -translate-x-1/2 -translate-y-1/2 select-none text-4xl drop-shadow-[0_5px_4px_rgba(15,23,42,0.22)] sm:text-5xl"
-                      style={{ left: `${position.x}%`, top: `${position.y}%` }}
-                      aria-hidden="true"
-                    >
-                      {sticker.emoji}
-                    </span>
-                  )
-                })}
+                    return (
+                      <span
+                        key={sticker.id}
+                        className="absolute -translate-x-1/2 -translate-y-1/2 select-none text-4xl drop-shadow-[0_5px_4px_rgba(15,23,42,0.22)] sm:text-5xl"
+                        style={{ left: `${position.x}%`, top: `${position.y}%` }}
+                        aria-hidden="true"
+                      >
+                        {sticker.emoji}
+                      </span>
+                    )
+                  })}
+                </div>
               </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
