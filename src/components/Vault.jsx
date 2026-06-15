@@ -146,12 +146,13 @@ function OpenEnvelope({ letter, onClose }) {
         </div>
 
         <div className="absolute inset-x-0 top-4 z-40 flex min-w-0 justify-center px-0 sm:px-6">
-          <div className="letter-paper relative min-h-[30rem] w-full max-w-[70rem] bg-[#fbfaf5] px-5 pb-9 pt-14 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[39rem] sm:px-12 sm:pb-12 sm:pt-16">
+          <div className="letter-paper saved-letter-paper relative min-h-[30rem] w-full max-w-6xl bg-[#fbfaf5] px-5 py-7 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[34rem] sm:px-14 sm:py-10">
             <div className="absolute left-0 right-0 top-0 h-10 bg-gradient-to-b from-white/70 to-transparent" />
-            <h2 className="letter-words relative z-10 mb-6 break-words font-mono text-2xl font-black uppercase tracking-[0.12em] text-slate-600 sm:mb-8 sm:text-3xl sm:tracking-[0.16em]">
+            <div className="absolute bottom-0 left-4 top-0 w-px bg-[#f9b8c4] sm:left-9" />
+            <h2 className="letter-words relative z-10 mb-2 break-words font-mono text-xl font-black uppercase tracking-[0.1em] text-[#838f58] sm:text-2xl sm:tracking-[0.14em]">
               {letter.title || "Untitled Letter"}
             </h2>
-            <p className="letter-words relative z-10 whitespace-pre-wrap break-words font-serif text-xl leading-8 text-slate-700 sm:text-2xl sm:leading-10">
+            <p className="letter-words relative z-10 min-h-[20rem] whitespace-pre-wrap break-words font-mono text-base leading-8 text-zinc-800 sm:min-h-[24rem] sm:text-lg">
               {letter.text}
             </p>
             <div className="letter-words pointer-events-none absolute inset-0 z-20">
