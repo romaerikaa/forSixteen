@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
+
+const savedLetterPaperWidth = 1152
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
@@ -95,6 +97,12 @@ function EnvelopeLetter({ letter, onOpen, currentTime }) {
 }
 
 function OpenEnvelope({ letter, onClose }) {
+  const frameRef = useRef(null)
+  const paperRef = useRef(null)
+  const [paperLayout, setPaperLayout] = useState({
+    height: 640,
+    scale: 1,
+  })
   const formattedOpenDate = letter.openAt
     ? new Date(letter.openAt).toLocaleString("en-US", {
         month: "short",
@@ -111,7 +119,7 @@ function OpenEnvelope({ letter, onClose }) {
       })
     : "Anytime"
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const previousBodyOverflow = document.body.style.overflow
     const previousHtmlOverscroll = document.documentElement.style.overscrollBehavior
 
@@ -124,6 +132,55 @@ function OpenEnvelope({ letter, onClose }) {
     }
   }, [])
 
+  useLayoutEffect(() => {
+    function updatePaperLayout() {
+      const frame = frameRef.current
+      const paper = paperRef.current
+
+      if (!frame || !paper) {
+        return
+      }
+
+      const horizontalPadding = window.matchMedia("(min-width: 640px)").matches ? 48 : 0
+      const availableWidth = Math.max(frame.clientWidth - horizontalPadding, 280)
+      const nextScale = Math.min(1, availableWidth / savedLetterPaperWidth)
+      const nextHeight = paper.scrollHeight
+
+      setPaperLayout((currentLayout) => {
+        if (
+          Math.abs(currentLayout.scale - nextScale) < 0.001 &&
+          Math.abs(currentLayout.height - nextHeight) < 1
+        ) {
+          return currentLayout
+        }
+
+        return {
+          height: nextHeight,
+          scale: nextScale,
+        }
+      })
+    }
+
+    updatePaperLayout()
+
+    const resizeObserver = new ResizeObserver(updatePaperLayout)
+
+    if (frameRef.current) {
+      resizeObserver.observe(frameRef.current)
+    }
+
+    if (paperRef.current) {
+      resizeObserver.observe(paperRef.current)
+    }
+
+    window.addEventListener("resize", updatePaperLayout)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener("resize", updatePaperLayout)
+    }
+  }, [letter])
+
   return createPortal(
     <div className="letter-modal fixed inset-0 z-[9999] flex items-start justify-center overflow-y-auto bg-slate-900/20 px-3 py-5 backdrop-blur-sm sm:px-6 sm:py-10 lg:items-center lg:py-12">
       <button
@@ -133,7 +190,7 @@ function OpenEnvelope({ letter, onClose }) {
         aria-label="Close letter"
       />
 
-      <div className="letter-modal-frame envelope-scene relative min-h-[34rem] sm:h-[42rem]">
+      <div ref={frameRef} className="letter-modal-frame envelope-scene relative min-h-[34rem] sm:h-[42rem]">
         <button
           type="button"
           onClick={onClose}
@@ -164,7 +221,22 @@ function OpenEnvelope({ letter, onClose }) {
         </div>
 
         <div className="absolute inset-x-0 top-4 z-40 flex min-w-0 justify-center px-0 sm:px-6">
-          <div className="letter-paper saved-letter-paper relative min-h-[30rem] w-full max-w-6xl bg-[#fbfaf5] px-5 py-7 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[34rem] sm:px-14 sm:py-10">
+          <div
+            className="relative"
+            style={{
+              height: `${paperLayout.height * paperLayout.scale}px`,
+              width: `${savedLetterPaperWidth * paperLayout.scale}px`,
+            }}
+          >
+          <div
+            ref={paperRef}
+            className="letter-paper saved-letter-paper relative min-h-[30rem] bg-[#fbfaf5] px-5 py-7 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[34rem] sm:px-14 sm:py-10"
+            style={{
+              transform: `scale(${paperLayout.scale})`,
+              transformOrigin: "top left",
+              width: `${savedLetterPaperWidth}px`,
+            }}
+          >
             <div className="absolute left-0 right-0 top-0 h-10 bg-gradient-to-b from-white/70 to-transparent" />
             <div className="absolute bottom-0 left-4 top-0 w-px bg-[#f9b8c4] sm:left-9" />
             <div className="relative">
@@ -191,6 +263,7 @@ function OpenEnvelope({ letter, onClose }) {
                 })}
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>
