@@ -206,28 +206,44 @@ function Write({ onSave, error }) {
                   "
                 />
                 <div className="mt-2 grid min-w-0 grid-cols-1 gap-2 sm:hidden">
-                  <input
-                    type="date"
-                    value={openDate}
-                    onChange={(event) => updateOpenDateTime(event.target.value, openTime)}
-                    className="
-                      h-14 min-w-0 w-full appearance-none border-4 border-[#f9d1d9] bg-[#fffdf8]
-                      px-3 py-2 font-mono text-base text-zinc-900 outline-none
-                      focus:border-[#838f58]
-                    "
-                  />
-                  <input
-                    type="time"
-                    value={openTime}
-                    onChange={(event) =>
-                      updateOpenDateTime(openDate || getTodayInputDate(), event.target.value)
-                    }
-                    className="
-                      h-14 min-w-0 w-full appearance-none border-4 border-[#f9d1d9] bg-[#fffdf8]
-                      px-3 py-2 font-mono text-base text-zinc-900 outline-none
-                      focus:border-[#838f58]
-                    "
-                  />
+                  <div className="relative">
+                    {!openDate && (
+                      <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm font-black uppercase tracking-[0.12em] text-zinc-400">
+                        Pick date
+                      </span>
+                    )}
+                    <input
+                      type="date"
+                      value={openDate}
+                      onChange={(event) => updateOpenDateTime(event.target.value, openTime)}
+                      className={`
+                        h-14 min-w-0 w-full appearance-none border-4 border-[#f9d1d9] bg-[#fffdf8]
+                        px-3 py-2 font-mono text-base outline-none
+                        focus:border-[#838f58]
+                        ${openDate ? "text-zinc-900" : "text-transparent"}
+                      `}
+                    />
+                  </div>
+                  <div className="relative">
+                    {!openTime && (
+                      <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 font-mono text-sm font-black uppercase tracking-[0.12em] text-zinc-400">
+                        Pick time
+                      </span>
+                    )}
+                    <input
+                      type="time"
+                      value={openTime}
+                      onChange={(event) =>
+                        updateOpenDateTime(openDate || getTodayInputDate(), event.target.value)
+                      }
+                      className={`
+                        h-14 min-w-0 w-full appearance-none border-4 border-[#f9d1d9] bg-[#fffdf8]
+                        px-3 py-2 font-mono text-base outline-none
+                        focus:border-[#838f58]
+                        ${openTime ? "text-zinc-900" : "text-transparent"}
+                      `}
+                    />
+                  </div>
                 </div>
                 <span className="mt-2 block text-[10px] tracking-[0.12em] text-zinc-400">
                   Leave blank for anytime
