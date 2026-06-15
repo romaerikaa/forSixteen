@@ -75,6 +75,16 @@ function Navbar({ activeIndex, onSelect, onLogout }) {
         </div>
       )}
 
+      <div className="mx-auto mb-2 hidden w-full max-w-7xl justify-end lg:flex">
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="border border-[#838f58] bg-[#fffdf8]/95 px-3 py-2 font-mono text-[10px] font-black uppercase tracking-[0.14em] text-[#838f58] shadow-[3px_3px_0_rgba(131,143,88,0.35)] transition hover:-translate-y-0.5 hover:bg-[#f9d1d9] sm:text-xs"
+        >
+          Logout
+        </button>
+      </div>
+
       <div className="relative z-10 mx-auto hidden w-full max-w-7xl grid-cols-5 items-stretch border-4 border-[#ff7faf] bg-[#ff7faf] shadow-[4px_4px_0_rgba(0,0,0,0.72),4px_8px_14px_rgba(0,0,0,0.2)] lg:grid sm:shadow-[7px_7px_0_rgba(0,0,0,0.78),7px_12px_18px_rgba(0,0,0,0.24)] xl:shadow-[10px_10px_0_rgba(0,0,0,0.82),10px_18px_22px_rgba(0,0,0,0.3)]">
         {navItems.map((item, index) => (
           <button
@@ -113,13 +123,6 @@ function Navbar({ activeIndex, onSelect, onLogout }) {
           </button>
         ))}
       </div>
-      <button
-        type="button"
-        onClick={handleLogout}
-        className="absolute right-3 top-3 z-20 hidden border border-[#838f58] bg-[#fffdf8]/95 px-3 py-2 font-mono text-[10px] font-black uppercase tracking-[0.14em] text-[#838f58] shadow-[3px_3px_0_rgba(131,143,88,0.35)] transition hover:-translate-y-0.5 hover:bg-[#f9d1d9] lg:block sm:right-5 sm:top-5 sm:text-xs xl:top-6"
-      >
-        Logout
-      </button>
     </nav>
   )
 }
