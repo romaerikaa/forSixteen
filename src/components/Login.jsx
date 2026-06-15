@@ -82,13 +82,13 @@ function Login({ onLogin }) {
 
           <section className="relative border-4 border-[#f9d1d9] bg-[#fffaf6]/96 p-5 shadow-[7px_7px_0_rgba(255,127,175,0.36)] backdrop-blur-sm sm:p-8">
             <p className="login-form-pop login-delay-1 font-mono text-xs font-black uppercase tracking-[0.22em] text-[#838f58]">
-              Welcome Back
+              Welcome!
             </p>
             <h2 className="login-form-pop login-delay-2 mt-4 break-words font-mono text-2xl font-black uppercase tracking-[0.12em] text-slate-900 sm:text-4xl sm:tracking-[0.14em]">
               ForSixteen
             </h2>
             <p className="login-form-pop login-delay-3 mt-4 font-serif text-xl leading-8 text-slate-700 sm:mt-5 sm:text-2xl sm:leading-9">
-              Open your little time capsule.
+              Open our little time capsule.
             </p>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-4 sm:mt-8 sm:space-y-5" autoComplete="off">

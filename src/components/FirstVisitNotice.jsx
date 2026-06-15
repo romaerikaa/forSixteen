@@ -38,7 +38,7 @@ function FirstVisitNotice({ onDismiss }) {
           Thank you for being in my life.
         </p>
         <p className="letter-words relative z-10 mt-10 text-right font-serif text-xl italic leading-8 text-slate-700 sm:text-2xl sm:leading-10">
-          with all my heart,
+          With all my heart,
           <br />
           Amor
         </p>

@@ -181,15 +181,6 @@ function Vault({ letters, error, isRefreshing, onRefresh, user }) {
         </h1>
 
         <div className="mx-auto mt-6 flex max-w-7xl flex-col items-center gap-3 px-0 sm:px-4">
-          <button
-            type="button"
-            onClick={onRefresh}
-            disabled={isRefreshing}
-            className="border-4 border-[#838f58] bg-[#f9d1d9] px-5 py-3 font-mono text-xs font-black uppercase tracking-[0.16em] text-slate-900 shadow-[4px_4px_0_rgba(131,143,88,0.55)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
-          >
-            {isRefreshing ? "Refreshing..." : "Refresh Letters"}
-          </button>
-
           {error && (
             <p className="w-full border-4 border-[#f9d1d9] bg-[#fffdf8] px-4 py-3 text-center font-mono text-xs font-bold uppercase tracking-[0.14em] text-rose-500">
               {error}
@@ -218,6 +209,15 @@ function Vault({ letters, error, isRefreshing, onRefresh, user }) {
       {openLetter && (
         <OpenEnvelope letter={openLetter} onClose={() => setOpenLetter(null)} />
       )}
+
+      <button
+        type="button"
+        onClick={onRefresh}
+        disabled={isRefreshing}
+        className="fixed bottom-6 right-5 z-40 border-4 border-[#838f58] bg-[#f9d1d9] px-4 py-3 font-mono text-[10px] font-black uppercase tracking-[0.14em] text-slate-900 shadow-[4px_4px_0_rgba(131,143,88,0.55)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 sm:bottom-8 sm:right-8 sm:px-5 sm:text-xs"
+      >
+        {isRefreshing ? "Refreshing..." : "Refresh"}
+      </button>
     </section>
   )
 }
