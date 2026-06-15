@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { createPortal } from "react-dom"
 
 function EnvelopeLetter({ letter, onOpen }) {
   const today = new Date().toISOString().slice(0, 10)
@@ -73,8 +74,8 @@ function OpenEnvelope({ letter, onClose }) {
       })
     : "Anytime"
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/20 px-6 py-12 backdrop-blur-sm">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-slate-900/20 px-6 py-12 backdrop-blur-sm">
       <button
         type="button"
         onClick={onClose}
@@ -124,7 +125,8 @@ function OpenEnvelope({ letter, onClose }) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 
