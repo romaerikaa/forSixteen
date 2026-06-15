@@ -77,7 +77,7 @@ function Login({ onLogin }) {
           <img
             src={ribbonImage}
             alt=""
-            className="login-ribbon pointer-events-none absolute -right-4 -top-11 z-20 w-28 drop-shadow-[0_8px_8px_rgba(190,70,112,0.24)] sm:-right-15 sm:-top-17 sm:w-44"
+            className="login-ribbon pointer-events-none absolute -right-4 -top-11 z-20 w-28 drop-shadow-[0_8px_8px_rgba(190,70,112,0.24)] sm:-right-20 sm:-top-18 sm:w-40 xl:-right-15 xl:-top-17 xl:w-44"
           />
 
           <section className="relative border-4 border-[#f9d1d9] bg-[#fffaf6]/96 p-5 shadow-[7px_7px_0_rgba(255,127,175,0.36)] backdrop-blur-sm sm:p-8">
