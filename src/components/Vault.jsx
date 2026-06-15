@@ -93,8 +93,21 @@ function OpenEnvelope({ letter, onClose }) {
       })
     : "Anytime"
 
+  useEffect(() => {
+    const previousBodyOverflow = document.body.style.overflow
+    const previousHtmlOverscroll = document.documentElement.style.overscrollBehavior
+
+    document.body.style.overflow = "hidden"
+    document.documentElement.style.overscrollBehavior = "none"
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow
+      document.documentElement.style.overscrollBehavior = previousHtmlOverscroll
+    }
+  }, [])
+
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-start justify-center overflow-y-auto bg-slate-900/20 px-3 py-5 backdrop-blur-sm sm:px-6 sm:py-10 lg:items-center lg:py-12">
+    <div className="letter-modal fixed inset-0 z-[9999] flex items-start justify-center overflow-y-auto bg-slate-900/20 px-3 py-5 backdrop-blur-sm sm:px-6 sm:py-10 lg:items-center lg:py-12">
       <button
         type="button"
         onClick={onClose}
@@ -102,7 +115,7 @@ function OpenEnvelope({ letter, onClose }) {
         aria-label="Close letter"
       />
 
-      <div className="envelope-scene relative min-h-[34rem] w-full max-w-7xl sm:h-[42rem]">
+      <div className="letter-modal-frame envelope-scene relative min-h-[34rem] sm:h-[42rem]">
         <button
           type="button"
           onClick={onClose}
@@ -132,8 +145,8 @@ function OpenEnvelope({ letter, onClose }) {
           </div>
         </div>
 
-        <div className="absolute inset-x-0 top-4 z-40 flex justify-center px-0 sm:px-6">
-          <div className="letter-paper relative min-h-[30rem] w-[94vw] max-w-[70rem] bg-[#fbfaf5] px-5 pb-9 pt-14 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[39rem] sm:w-[82vw] sm:px-12 sm:pb-12 sm:pt-16">
+        <div className="absolute inset-x-0 top-4 z-40 flex min-w-0 justify-center px-0 sm:px-6">
+          <div className="letter-paper relative min-h-[30rem] w-full max-w-[70rem] bg-[#fbfaf5] px-5 pb-9 pt-14 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[39rem] sm:px-12 sm:pb-12 sm:pt-16">
             <div className="absolute left-0 right-0 top-0 h-10 bg-gradient-to-b from-white/70 to-transparent" />
             <h2 className="letter-words relative z-10 mb-6 break-words font-mono text-2xl font-black uppercase tracking-[0.12em] text-slate-600 sm:mb-8 sm:text-3xl sm:tracking-[0.16em]">
               {letter.title || "Untitled Letter"}

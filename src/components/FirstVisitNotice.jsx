@@ -1,6 +1,6 @@
 function FirstVisitNotice({ onDismiss }) {
   return (
-    <div className="fixed inset-0 z-[10000] flex items-start justify-center overflow-y-auto bg-slate-900/20 px-3 py-24 backdrop-blur-sm sm:px-6 sm:py-28 lg:items-center lg:py-12">
+    <div className="letter-modal fixed inset-0 z-[10000] flex items-start justify-center overflow-y-auto bg-slate-900/20 px-3 py-24 backdrop-blur-sm sm:px-6 sm:py-28 lg:items-center lg:py-12">
       <button
         type="button"
         onClick={onDismiss}
@@ -8,7 +8,7 @@ function FirstVisitNotice({ onDismiss }) {
         aria-label="Close notice"
       />
 
-      <section className="letter-paper relative min-h-[30rem] w-[94vw] max-w-[70rem] bg-[#fbfaf5] px-5 pb-9 pt-14 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[39rem] sm:w-[82vw] sm:px-12 sm:pb-12 sm:pt-16">
+      <section className="letter-paper relative min-h-[30rem] w-full max-w-[70rem] bg-[#fbfaf5] px-5 pb-9 pt-14 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[39rem] sm:px-12 sm:pb-12 sm:pt-16">
         <button
           type="button"
           onClick={onDismiss}
