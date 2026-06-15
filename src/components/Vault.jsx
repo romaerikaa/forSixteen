@@ -1,10 +1,21 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 
-function EnvelopeLetter({ letter, onOpen }) {
-  const today = new Date().toISOString().slice(0, 10)
-  const canOpen = !letter.openDate || letter.openDate <= today
-  const formattedOpenDate = letter.openDate
+function EnvelopeLetter({ letter, onOpen, currentTime }) {
+  const today = new Date(currentTime).toISOString().slice(0, 10)
+  const canOpen =
+    letter.openAt
+      ? new Date(letter.openAt).getTime() <= currentTime
+      : !letter.openDate || letter.openDate <= today
+  const formattedOpenDate = letter.openAt
+    ? new Date(letter.openAt).toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })
+    : letter.openDate
     ? new Date(`${letter.openDate}T00:00:00`).toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
@@ -66,7 +77,15 @@ function EnvelopeLetter({ letter, onOpen }) {
 }
 
 function OpenEnvelope({ letter, onClose }) {
-  const formattedOpenDate = letter.openDate
+  const formattedOpenDate = letter.openAt
+    ? new Date(letter.openAt).toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })
+    : letter.openDate
     ? new Date(`${letter.openDate}T00:00:00`).toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
@@ -132,6 +151,15 @@ function OpenEnvelope({ letter, onClose }) {
 
 function Vault({ letters }) {
   const [openLetter, setOpenLetter] = useState(null)
+  const [currentTime, setCurrentTime] = useState(() => Date.now())
+
+  useEffect(() => {
+    const timerId = window.setInterval(() => {
+      setCurrentTime(Date.now())
+    }, 60 * 1000)
+
+    return () => window.clearInterval(timerId)
+  }, [])
 
   return (
     <section className="vault-enter min-h-[calc(100vh-9rem)] bg-[#eef2f5] px-4 py-10 vault-grid sm:px-6 sm:py-14">
@@ -147,7 +175,12 @@ function Vault({ letters }) {
             </div>
           ) : (
             letters.map((letter) => (
-              <EnvelopeLetter key={letter.id} letter={letter} onOpen={setOpenLetter} />
+              <EnvelopeLetter
+                key={letter.id}
+                letter={letter}
+                onOpen={setOpenLetter}
+                currentTime={currentTime}
+              />
             ))
           )}
         </div>

@@ -4,6 +4,7 @@ create table if not exists letters (
   title text not null,
   text text not null,
   open_date date,
+  open_at timestamp with time zone,
   created_at timestamp with time zone default now() not null
 );
 
@@ -17,6 +18,7 @@ create table if not exists gallery_memories (
 );
 
 alter table letters add column if not exists account_name text;
+alter table letters add column if not exists open_at timestamp with time zone;
 alter table gallery_memories add column if not exists account_name text;
 
 alter table letters enable row level security;

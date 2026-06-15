@@ -24,16 +24,18 @@ function mapLetter(row) {
     title: row.title,
     text: row.text,
     openDate: row.open_date || "",
+    openAt: row.open_at || "",
     date: formatDate(row.created_at),
   }
 }
 
-function createLocalLetter({ title, text, openDate }) {
+function createLocalLetter({ title, text, openDate, openAt }) {
   return {
     id: crypto.randomUUID(),
     title,
     text,
     openDate: openDate || "",
+    openAt: openAt || "",
     date: formatDate(new Date().toISOString()),
   }
 }
@@ -77,7 +79,7 @@ function App() {
     loadLetters()
   }, [user])
 
-  async function handleSaveLetter({ title, text, openDate }) {
+  async function handleSaveLetter({ title, text, openDate, openAt }) {
     setLetterError("")
 
     if (!isSupabaseConfigured) {
@@ -87,22 +89,32 @@ function App() {
       return false
     }
 
-    const { error } = await supabase
-      .from("letters")
-      .insert({
-        account_name: user.id,
-        title,
-        text,
-        open_date: openDate || null,
-      })
+    const letterData = {
+      account_name: user.id,
+      title,
+      text,
+      open_date: openDate || null,
+    }
+
+    if (openAt) {
+      letterData.open_at = openAt
+    }
+
+    const { error } = await supabase.from("letters").insert(letterData)
 
     if (error) {
-      setLetterError(`Letter save failed: ${error.message}`)
+      const needsOpenAtColumn =
+        openAt && error.message.toLowerCase().includes("open_at")
+      setLetterError(
+        needsOpenAtColumn
+          ? "Letter save failed: run the updated Supabase SQL first so timed locks can save."
+          : `Letter save failed: ${error.message}`,
+      )
       return false
     }
 
     setLetters((currentLetters) => [
-      createLocalLetter({ title, text, openDate }),
+      createLocalLetter({ title, text, openDate, openAt }),
       ...currentLetters,
     ])
     setActivePage(2)

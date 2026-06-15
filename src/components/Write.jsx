@@ -3,7 +3,7 @@ import { useState } from "react"
 function Write({ onSave, error }) {
   const [title, setTitle] = useState("")
   const [letter, setLetter] = useState("")
-  const [openDate, setOpenDate] = useState("")
+  const [openDateTime, setOpenDateTime] = useState("")
   const [isSaving, setIsSaving] = useState(false)
 
   async function handleSave() {
@@ -18,14 +18,15 @@ function Write({ onSave, error }) {
     const didSave = await onSave({
       title: trimmedTitle || "Untitled Letter",
       text: trimmedLetter,
-      openDate,
+      openDate: "",
+      openAt: openDateTime ? new Date(openDateTime).toISOString() : "",
     })
     setIsSaving(false)
 
     if (didSave) {
       setTitle("")
       setLetter("")
-      setOpenDate("")
+      setOpenDateTime("")
     }
   }
 
@@ -54,15 +55,15 @@ function Write({ onSave, error }) {
               Write a Letter
             </h1>
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-              <label className="font-mono text-xs font-black uppercase tracking-[0.16em] text-[#838f58]">
-                Open Date
+            <div className="grid w-full gap-3 sm:grid-cols-[minmax(15rem,1fr)_auto] sm:items-start lg:w-auto">
+              <label className="flex flex-col font-mono text-xs font-black uppercase tracking-[0.16em] text-[#838f58]">
+                Open Time
                 <input
-                  type="date"
-                  value={openDate}
-                  onChange={(event) => setOpenDate(event.target.value)}
+                  type="datetime-local"
+                  value={openDateTime}
+                  onChange={(event) => setOpenDateTime(event.target.value)}
                   className="
-                    mt-2 block w-full border-4 border-[#f9d1d9] bg-[#fffdf8]
+                    mt-2 block h-[3.5rem] w-full border-4 border-[#f9d1d9] bg-[#fffdf8]
                     px-4 py-2 font-mono text-sm text-zinc-900 outline-none
                     focus:border-[#838f58]
                   "
@@ -72,20 +73,23 @@ function Write({ onSave, error }) {
                 </span>
               </label>
 
-              <button
-                type="button"
-                onClick={handleSave}
-                disabled={!letter.trim() || isSaving}
-                className="
-                  w-full border-4 border-[#838f58] bg-[#f9d1d9] px-6 py-3 sm:w-auto
-                  font-mono text-sm font-black uppercase tracking-[0.16em]
-                  text-zinc-900 shadow-[5px_5px_0_rgba(131,143,88,0.7)]
-                  transition hover:-translate-y-0.5 hover:bg-[#f7c4cf]
-                  disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0
-                "
-              >
-                {isSaving ? "Saving..." : "Save"}
-              </button>
+              <div className="flex flex-col">
+                <span className="hidden h-[1.25rem] sm:block" aria-hidden="true" />
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={!letter.trim() || isSaving}
+                  className="
+                    h-[3.5rem] w-full border-4 border-[#838f58] bg-[#f9d1d9] px-6 py-3 sm:w-auto
+                    font-mono text-sm font-black uppercase tracking-[0.16em]
+                    text-zinc-900 shadow-[5px_5px_0_rgba(131,143,88,0.7)]
+                    transition hover:-translate-y-0.5 hover:bg-[#f7c4cf]
+                    disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0
+                  "
+                >
+                  {isSaving ? "Saving..." : "Save"}
+                </button>
+              </div>
             </div>
           </div>
 

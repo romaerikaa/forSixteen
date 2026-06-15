@@ -164,7 +164,7 @@ function Gallery({ user }) {
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="mt-2 block w-full max-w-full overflow-hidden font-mono text-xs text-slate-600 file:mr-3 file:border-0 file:bg-[#f9d1d9] file:px-3 file:py-2 file:font-mono file:font-black file:uppercase file:tracking-[0.1em] file:text-slate-900 sm:text-sm sm:file:mr-4 sm:file:px-4 sm:file:tracking-[0.12em]"
+                  className="mt-2 block w-full max-w-full overflow-hidden font-mono text-xs text-slate-600 outline-none transition file:mr-3 file:cursor-pointer file:border-0 file:bg-[#ff7faf] file:px-3 file:py-2 file:font-mono file:font-black file:uppercase file:tracking-[0.1em] file:text-slate-950 file:shadow-[4px_4px_0_rgba(131,143,88,0.55)] file:transition hover:file:-translate-y-0.5 hover:file:bg-[#ff5f9b] focus-visible:ring-4 focus-visible:ring-[#ff9fc3] active:file:translate-x-0.5 active:file:translate-y-0.5 active:file:shadow-[2px_2px_0_rgba(131,143,88,0.7)] sm:text-sm sm:file:mr-4 sm:file:px-4 sm:file:tracking-[0.12em]"
                 />
               </label>
 
