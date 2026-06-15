@@ -20,6 +20,16 @@ function mapMemory(row) {
   }
 }
 
+function createLocalMemory({ imageUrl, title, caption }) {
+  return {
+    id: crypto.randomUUID(),
+    image: imageUrl,
+    title,
+    caption,
+    date: formatDate(new Date().toISOString()),
+  }
+}
+
 function Gallery({ user }) {
   const [memories, setMemories] = useState([])
   const [title, setTitle] = useState("")
@@ -97,16 +107,17 @@ function Gallery({ user }) {
       .from("gallery")
       .getPublicUrl(filePath)
 
-    const { data, error: insertError } = await supabase
+    const memoryTitle = title.trim() || "Untitled Memory"
+    const memoryCaption = caption.trim()
+
+    const { error: insertError } = await supabase
       .from("gallery_memories")
       .insert({
         account_name: user.id,
-        title: title.trim() || "Untitled Memory",
-        caption: caption.trim(),
+        title: memoryTitle,
+        caption: memoryCaption,
         image_url: publicUrlData.publicUrl,
       })
-      .select()
-      .single()
 
     setIsSaving(false)
 
@@ -115,7 +126,14 @@ function Gallery({ user }) {
       return
     }
 
-    setMemories((currentMemories) => [mapMemory(data), ...currentMemories])
+    setMemories((currentMemories) => [
+      createLocalMemory({
+        imageUrl: publicUrlData.publicUrl,
+        title: memoryTitle,
+        caption: memoryCaption,
+      }),
+      ...currentMemories,
+    ])
     setTitle("")
     setCaption("")
     setImageFile(null)

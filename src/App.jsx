@@ -28,6 +28,16 @@ function mapLetter(row) {
   }
 }
 
+function createLocalLetter({ title, text, openDate }) {
+  return {
+    id: crypto.randomUUID(),
+    title,
+    text,
+    openDate: openDate || "",
+    date: formatDate(new Date().toISOString()),
+  }
+}
+
 function App() {
   const [hasSeenSplash, setHasSeenSplash] = useState(false)
   const [user, setUser] = useState(() => {
@@ -77,7 +87,7 @@ function App() {
       return false
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("letters")
       .insert({
         account_name: user.id,
@@ -85,15 +95,16 @@ function App() {
         text,
         open_date: openDate || null,
       })
-      .select()
-      .single()
 
     if (error) {
       setLetterError(`Letter save failed: ${error.message}`)
       return false
     }
 
-    setLetters((currentLetters) => [mapLetter(data), ...currentLetters])
+    setLetters((currentLetters) => [
+      createLocalLetter({ title, text, openDate }),
+      ...currentLetters,
+    ])
     setActivePage(2)
     return true
   }

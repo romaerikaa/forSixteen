@@ -19,8 +19,37 @@ create table if not exists gallery_memories (
 alter table letters add column if not exists account_name text;
 alter table gallery_memories add column if not exists account_name text;
 
-alter table letters disable row level security;
-alter table gallery_memories disable row level security;
+alter table letters enable row level security;
+alter table gallery_memories enable row level security;
+
+drop policy if exists "Anyone can read letters" on letters;
+drop policy if exists "Anyone can save letters" on letters;
+drop policy if exists "Anyone can read gallery memories" on gallery_memories;
+drop policy if exists "Anyone can save gallery memories" on gallery_memories;
+
+create policy "Anyone can read letters"
+on letters for select
+to anon
+using (true);
+
+create policy "Anyone can save letters"
+on letters for insert
+to anon
+with check (true);
+
+create policy "Anyone can read gallery memories"
+on gallery_memories for select
+to anon
+using (true);
+
+create policy "Anyone can save gallery memories"
+on gallery_memories for insert
+to anon
+with check (true);
+
+grant usage on schema public to anon;
+grant select, insert on letters to anon;
+grant select, insert on gallery_memories to anon;
 
 insert into storage.buckets (id, name, public)
 values ('gallery', 'gallery', true)
