@@ -8,7 +8,7 @@ function Splash({ onContinue }) {
           src={frontImage}
           alt="ForSixteen"
           onAnimationEnd={onContinue}
-          className="splash-front mx-auto w-48 sm:w-64 lg:w-80 max-h-[58vh] w-full object-contain sm:max-h-[62vh]"
+          className="splash-front mx-auto max-h-[46vh] w-36 object-contain sm:max-h-[62vh] sm:w-64 lg:w-80"
         />
       </section>
     </main>
