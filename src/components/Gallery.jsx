@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { supabase } from "../lib/supabase"
+import { isSupabaseConfigured, supabase } from "../lib/supabase"
 
 function formatDate(date) {
   return new Date(date).toLocaleDateString("en-US", {
@@ -30,20 +30,28 @@ function Gallery({ user }) {
 
   useEffect(() => {
     if (!user) {
-      setMemories([])
       return
     }
 
     async function loadMemories() {
+      if (!isSupabaseConfigured) {
+        setError("Supabase is not configured on this deployment.")
+        return
+      }
+
       const { data, error } = await supabase
         .from("gallery_memories")
         .select("*")
         .eq("account_name", user.id)
         .order("created_at", { ascending: false })
 
-      if (!error) {
-        setMemories(data.map(mapMemory))
+      if (error) {
+        setError(`Gallery could not load: ${error.message}`)
+        return
       }
+
+      setError("")
+      setMemories(data.map(mapMemory))
     }
 
     loadMemories()
@@ -64,6 +72,14 @@ function Gallery({ user }) {
     setIsSaving(true)
     setError("")
 
+    if (!isSupabaseConfigured) {
+      setError(
+        "Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel.",
+      )
+      setIsSaving(false)
+      return
+    }
+
     const fileExtension = imageFile.name.split(".").pop()
     const filePath = `${user.id}/${crypto.randomUUID()}.${fileExtension}`
 
@@ -72,7 +88,7 @@ function Gallery({ user }) {
       .upload(filePath, imageFile)
 
     if (uploadError) {
-      setError("Photo upload failed.")
+      setError(`Photo upload failed: ${uploadError.message}`)
       setIsSaving(false)
       return
     }
@@ -95,11 +111,11 @@ function Gallery({ user }) {
     setIsSaving(false)
 
     if (insertError) {
-      setError("Memory save failed.")
+      setError(`Memory save failed: ${insertError.message}`)
       return
     }
 
-    setMemories([mapMemory(data), ...memories])
+    setMemories((currentMemories) => [mapMemory(data), ...currentMemories])
     setTitle("")
     setCaption("")
     setImageFile(null)

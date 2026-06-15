@@ -1,5 +1,17 @@
 # React + Vite
 
+## Vercel setup
+
+This app saves letters and uploaded photos in Supabase. In Vercel, add these
+environment variables in Project Settings > Environment Variables, then redeploy:
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+
+Also run `supabase-setup.sql` in the Supabase SQL editor once. It creates the
+`letters` and `gallery_memories` tables, plus the public `gallery` storage
+bucket and upload/read policies.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

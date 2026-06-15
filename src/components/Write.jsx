@@ -1,11 +1,12 @@
 import { useState } from "react"
 
-function Write({ onSave }) {
+function Write({ onSave, error }) {
   const [title, setTitle] = useState("")
   const [letter, setLetter] = useState("")
   const [openDate, setOpenDate] = useState("")
+  const [isSaving, setIsSaving] = useState(false)
 
-  function handleSave() {
+  async function handleSave() {
     const trimmedTitle = title.trim()
     const trimmedLetter = letter.trim()
 
@@ -13,10 +14,19 @@ function Write({ onSave }) {
       return
     }
 
-    onSave({ title: trimmedTitle || "Untitled Letter", text: trimmedLetter, openDate })
-    setTitle("")
-    setLetter("")
-    setOpenDate("")
+    setIsSaving(true)
+    const didSave = await onSave({
+      title: trimmedTitle || "Untitled Letter",
+      text: trimmedLetter,
+      openDate,
+    })
+    setIsSaving(false)
+
+    if (didSave) {
+      setTitle("")
+      setLetter("")
+      setOpenDate("")
+    }
   }
 
   return (
@@ -65,7 +75,7 @@ function Write({ onSave }) {
               <button
                 type="button"
                 onClick={handleSave}
-                disabled={!letter.trim()}
+                disabled={!letter.trim() || isSaving}
                 className="
                   border-4 border-[#838f58] bg-[#f9d1d9] px-6 py-3
                   font-mono text-sm font-black uppercase tracking-[0.16em]
@@ -74,10 +84,16 @@ function Write({ onSave }) {
                   disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0
                 "
               >
-                Save
+                {isSaving ? "Saving..." : "Save"}
               </button>
             </div>
           </div>
+
+          {error && (
+            <p className="relative mb-5 border-4 border-[#f9d1d9] bg-white px-4 py-3 font-mono text-xs font-bold uppercase tracking-[0.14em] text-rose-500">
+              {error}
+            </p>
+          )}
 
           <input
             type="text"

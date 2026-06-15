@@ -8,7 +8,7 @@ import Gallery from "./components/Gallery"
 import Splash from "./components/Splash"
 import Vault from "./components/Vault"
 import Write from "./components/Write"
-import { supabase } from "./lib/supabase"
+import { isSupabaseConfigured, supabase } from "./lib/supabase"
 
 function formatDate(date) {
   return new Date(date).toLocaleDateString("en-US", {
@@ -36,29 +36,47 @@ function App() {
   })
   const [activePage, setActivePage] = useState(0)
   const [letters, setLetters] = useState([])
+  const [letterError, setLetterError] = useState("")
 
   useEffect(() => {
     if (!user) {
-      setLetters([])
       return
     }
 
     async function loadLetters() {
+      if (!isSupabaseConfigured) {
+        setLetterError("Supabase is not configured on this deployment.")
+        return
+      }
+
       const { data, error } = await supabase
         .from("letters")
         .select("*")
         .eq("account_name", user.id)
         .order("created_at", { ascending: false })
 
-      if (!error) {
-        setLetters(data.map(mapLetter))
+      if (error) {
+        setLetterError(`Letters could not load: ${error.message}`)
+        return
       }
+
+      setLetterError("")
+      setLetters(data.map(mapLetter))
     }
 
     loadLetters()
   }, [user])
 
   async function handleSaveLetter({ title, text, openDate }) {
+    setLetterError("")
+
+    if (!isSupabaseConfigured) {
+      setLetterError(
+        "Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel.",
+      )
+      return false
+    }
+
     const { data, error } = await supabase
       .from("letters")
       .insert({
@@ -71,16 +89,18 @@ function App() {
       .single()
 
     if (error) {
-      return
+      setLetterError(`Letter save failed: ${error.message}`)
+      return false
     }
 
-    setLetters([mapLetter(data), ...letters])
+    setLetters((currentLetters) => [mapLetter(data), ...currentLetters])
     setActivePage(2)
+    return true
   }
 
   const pages = [
     <ForSixteen onNavigate={setActivePage} />,
-    <Write onSave={handleSaveLetter} />,
+    <Write onSave={handleSaveLetter} error={letterError} />,
     <Vault letters={letters} />,
     <Gallery user={user} />,
     <About />,
