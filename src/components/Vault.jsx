@@ -141,7 +141,7 @@ function OpenEnvelope({ letter, onClose }) {
             <p className="letter-words relative z-10 whitespace-pre-wrap break-words font-serif text-xl leading-8 text-slate-700 sm:text-2xl sm:leading-10">
               {letter.text}
             </p>
-            <div className="pointer-events-none absolute inset-0 z-20">
+            <div className="letter-words pointer-events-none absolute inset-0 z-20">
               {(letter.stickers || []).map((sticker) => (
                 <span
                   key={sticker.id}
