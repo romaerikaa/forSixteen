@@ -15,7 +15,7 @@ const features = [
 
 function About() {
   return (
-    <section className="about-enter min-h-screen bg-[#f5f6f0] px-4 pb-10 pt-28 vault-grid sm:px-6 sm:pb-16 sm:pt-36 lg:pt-52 xl:pt-60">
+    <section className="about-enter min-h-screen bg-[#f5f6f0] px-4 pb-10 pt-28 vault-grid sm:px-6 sm:pb-16 sm:pt-36 lg:pt-64 xl:pt-72">
       <div className="mx-auto max-w-5xl">
         <div className="relative border-4 border-[#f9d1d9] bg-[#fffdf8] px-5 py-8 shadow-[7px_7px_0_rgba(131,143,88,0.45)] sm:px-14 sm:py-14 sm:shadow-[12px_12px_0_rgba(131,143,88,0.45)]">
           <div className="absolute left-1/2 top-0 h-9 w-32 -translate-x-1/2 -translate-y-1/2 rotate-1 bg-[#f9d1d9]/70 shadow-sm" />

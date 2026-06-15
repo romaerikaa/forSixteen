@@ -170,7 +170,7 @@ function Write({ onSave, error }) {
   return (
     <section
       className="
-        write-enter min-h-screen px-4 pb-8 pt-28 sm:px-6 sm:pb-14 sm:pt-36 lg:pt-52 xl:pt-60
+        write-enter min-h-screen px-4 pb-8 pt-28 sm:px-6 sm:pb-14 sm:pt-36 lg:pt-64 xl:pt-72
         bg-[#f8f8f8]
         bg-[linear-gradient(#e4e8ec_1px,transparent_1px),
         linear-gradient(90deg,#e4e8ec_1px,transparent_1px)]
