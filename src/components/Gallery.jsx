@@ -141,21 +141,21 @@ function Gallery({ user }) {
   }
 
   return (
-    <section className="gallery-enter min-h-[calc(100vh-9rem)] bg-[#f5f6f0] px-6 py-12 vault-grid">
+    <section className="gallery-enter min-h-[calc(100vh-9rem)] bg-[#f5f6f0] px-4 py-8 vault-grid sm:px-6 sm:py-12">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <h1 className="font-mono text-3xl font-black uppercase tracking-[0.18em] text-[#838f58]">
+            <h1 className="font-mono text-2xl font-black uppercase tracking-[0.14em] text-[#838f58] sm:text-3xl sm:tracking-[0.18em]">
               Gallery
             </h1>
-            <p className="mt-3 font-mono text-sm font-bold uppercase tracking-[0.14em] text-slate-500">
+            <p className="mt-3 font-mono text-xs font-bold uppercase tracking-[0.14em] text-slate-500 sm:text-sm">
               Polaroid Memory Board
             </p>
           </div>
 
           <form
             onSubmit={handleSave}
-            className="w-full max-w-xl border-4 border-[#f9d1d9] bg-[#fffdf8] p-5 shadow-[8px_8px_0_rgba(131,143,88,0.45)]"
+            className="w-full max-w-xl border-4 border-[#f9d1d9] bg-[#fffdf8] p-4 shadow-[6px_6px_0_rgba(131,143,88,0.45)] sm:p-5 sm:shadow-[8px_8px_0_rgba(131,143,88,0.45)]"
           >
             <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
               <label className="font-mono text-xs font-black uppercase tracking-[0.16em] text-[#838f58]">
@@ -164,14 +164,14 @@ function Gallery({ user }) {
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="mt-2 block w-full font-mono text-sm text-slate-600 file:mr-4 file:border-0 file:bg-[#f9d1d9] file:px-4 file:py-2 file:font-mono file:font-black file:uppercase file:tracking-[0.12em] file:text-slate-900"
+                  className="mt-2 block w-full max-w-full overflow-hidden font-mono text-xs text-slate-600 file:mr-3 file:border-0 file:bg-[#f9d1d9] file:px-3 file:py-2 file:font-mono file:font-black file:uppercase file:tracking-[0.1em] file:text-slate-900 sm:text-sm sm:file:mr-4 sm:file:px-4 sm:file:tracking-[0.12em]"
                 />
               </label>
 
               <button
                 type="submit"
                 disabled={!imageFile || isSaving}
-                className="self-end border-4 border-[#838f58] bg-[#f9d1d9] px-6 py-3 font-mono text-sm font-black uppercase tracking-[0.16em] text-slate-900 shadow-[5px_5px_0_rgba(131,143,88,0.55)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0"
+                className="w-full self-end border-4 border-[#838f58] bg-[#f9d1d9] px-6 py-3 font-mono text-sm font-black uppercase tracking-[0.16em] text-slate-900 shadow-[5px_5px_0_rgba(131,143,88,0.55)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0 sm:w-auto"
               >
                 {isSaving ? "Saving..." : "Save"}
               </button>
@@ -200,7 +200,7 @@ function Gallery({ user }) {
           </form>
         </div>
 
-        <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {memories.length === 0 ? (
             <div className="col-span-full border-4 border-[#f9d1d9] bg-[#fffdf8] p-8 font-mono text-slate-500 shadow-[8px_8px_0_rgba(131,143,88,0.45)]">
               No memories yet.
@@ -209,7 +209,7 @@ function Gallery({ user }) {
             memories.map((memory, index) => (
               <article
                 key={memory.id}
-                className={`polaroid-card relative bg-[#fffdf8] p-4 pb-7 shadow-[10px_12px_0_rgba(148,163,184,0.35)] ${
+                className={`polaroid-card relative bg-[#fffdf8] p-4 pb-7 shadow-[7px_9px_0_rgba(148,163,184,0.35)] sm:shadow-[10px_12px_0_rgba(148,163,184,0.35)] ${
                   index % 3 === 0
                     ? "-rotate-2"
                     : index % 3 === 1

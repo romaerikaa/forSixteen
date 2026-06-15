@@ -32,25 +32,25 @@ function Write({ onSave, error }) {
   return (
     <section
       className="
-        write-enter min-h-[calc(100vh-9rem)] px-6 py-14
+        write-enter min-h-[calc(100vh-9rem)] px-4 py-8 sm:px-6 sm:py-14
         bg-[#f8f8f8]
         bg-[linear-gradient(#e4e8ec_1px,transparent_1px),
         linear-gradient(90deg,#e4e8ec_1px,transparent_1px)]
         bg-[size:24px_24px]
       "
     >
-      <div className="mx-auto max-w-6xl border-4 border-[#f9d1d9] bg-[#fffdf8] shadow-[10px_10px_0_rgba(131,143,88,0.65)]">
+      <div className="mx-auto max-w-6xl border-4 border-[#f9d1d9] bg-[#fffdf8] shadow-[6px_6px_0_rgba(131,143,88,0.65)] sm:shadow-[10px_10px_0_rgba(131,143,88,0.65)]">
         <div
           className="
-            relative min-h-[34rem] px-14 py-10
+            relative min-h-[30rem] px-5 py-7 sm:min-h-[34rem] sm:px-14 sm:py-10
             bg-[linear-gradient(to_bottom,transparent_31px,#d8dee6_32px)]
             bg-[length:100%_32px]
           "
         >
-          <div className="absolute bottom-0 left-9 top-0 w-px bg-[#f9b8c4]" />
+          <div className="absolute bottom-0 left-4 top-0 w-px bg-[#f9b8c4] sm:left-9" />
 
           <div className="relative mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <h1 className="font-mono text-3xl font-black uppercase tracking-[0.16em] text-[#838f58]">
+            <h1 className="break-words font-mono text-2xl font-black uppercase tracking-[0.12em] text-[#838f58] sm:text-3xl sm:tracking-[0.16em]">
               Write a Letter
             </h1>
 
@@ -62,7 +62,7 @@ function Write({ onSave, error }) {
                   value={openDate}
                   onChange={(event) => setOpenDate(event.target.value)}
                   className="
-                    mt-2 block border-4 border-[#f9d1d9] bg-[#fffdf8]
+                    mt-2 block w-full border-4 border-[#f9d1d9] bg-[#fffdf8]
                     px-4 py-2 font-mono text-sm text-zinc-900 outline-none
                     focus:border-[#838f58]
                   "
@@ -77,7 +77,7 @@ function Write({ onSave, error }) {
                 onClick={handleSave}
                 disabled={!letter.trim() || isSaving}
                 className="
-                  border-4 border-[#838f58] bg-[#f9d1d9] px-6 py-3
+                  w-full border-4 border-[#838f58] bg-[#f9d1d9] px-6 py-3 sm:w-auto
                   font-mono text-sm font-black uppercase tracking-[0.16em]
                   text-zinc-900 shadow-[5px_5px_0_rgba(131,143,88,0.7)]
                   transition hover:-translate-y-0.5 hover:bg-[#f7c4cf]
@@ -100,9 +100,10 @@ function Write({ onSave, error }) {
             value={title}
             onChange={(event) => setTitle(event.target.value)}
             className="
-              relative mb-2 w-full bg-transparent font-mono text-2xl
-              font-black uppercase tracking-[0.14em] text-[#838f58]
+              relative mb-2 w-full bg-transparent font-mono text-xl
+              font-black uppercase tracking-[0.1em] text-[#838f58]
               outline-none placeholder:text-[#838f58]/45
+              sm:text-2xl sm:tracking-[0.14em]
             "
             placeholder="Letter title"
           />
@@ -111,9 +112,10 @@ function Write({ onSave, error }) {
             value={letter}
             onChange={(event) => setLetter(event.target.value)}
             className="
-              relative min-h-[24rem] w-full resize-none bg-transparent
-              font-mono text-lg leading-8 text-zinc-800 outline-none
+              relative min-h-[20rem] w-full resize-none bg-transparent
+              font-mono text-base leading-8 text-zinc-800 outline-none
               placeholder:text-zinc-400
+              sm:min-h-[24rem] sm:text-lg
             "
             placeholder="Start writing here..."
           />

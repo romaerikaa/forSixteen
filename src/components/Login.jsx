@@ -44,20 +44,20 @@ function Login({ onLogin }) {
 
   return (
     <main
-      className="login-page flex min-h-screen items-center justify-center bg-center bg-no-repeat px-6 py-12"
+      className="login-page flex min-h-screen items-center justify-center bg-center bg-no-repeat px-4 py-10 sm:px-6 sm:py-12"
       style={{
         backgroundImage: `url("${bgForSixteen}")`,
         backgroundSize: "100% 100%",
       }}
     >
-      <section className="w-full max-w-md border-4 border-[#f9d1d9] bg-[#fffdf8]/94 p-8 shadow-[12px_12px_0_rgba(131,143,88,0.5)] backdrop-blur-sm">
+      <section className="w-full max-w-md border-4 border-[#f9d1d9] bg-[#fffdf8]/94 p-5 shadow-[7px_7px_0_rgba(131,143,88,0.5)] backdrop-blur-sm sm:p-8 sm:shadow-[12px_12px_0_rgba(131,143,88,0.5)]">
         <p className="font-mono text-xs font-black uppercase tracking-[0.22em] text-[#838f58]">
           Welcome Back
         </p>
-        <h1 className="mt-4 font-mono text-4xl font-black uppercase tracking-[0.14em] text-slate-900">
+        <h1 className="mt-4 break-words font-mono text-3xl font-black uppercase tracking-[0.12em] text-slate-900 sm:text-4xl sm:tracking-[0.14em]">
           ForSixteen
         </h1>
-        <p className="mt-5 font-serif text-2xl leading-9 text-slate-700">
+        <p className="mt-5 font-serif text-xl leading-8 text-slate-700 sm:text-2xl sm:leading-9">
           Open your little time capsule.
         </p>
 
