@@ -189,7 +189,7 @@ function Gallery({ user }) {
   }
 
   return (
-    <section className="gallery-enter min-h-screen bg-[#f5f6f0] px-4 pb-8 pt-28 vault-grid sm:px-6 sm:pb-12 sm:pt-36 xl:pt-44">
+    <section className="gallery-enter min-h-screen bg-[#f5f6f0] px-4 pb-8 pt-28 vault-grid sm:px-6 sm:pb-12 sm:pt-36 lg:pt-52 xl:pt-60">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
           <div>

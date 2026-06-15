@@ -13,7 +13,7 @@ const quickLinks = [
 function ForSixteen({ onNavigate }) {
   return (
     <main
-      className="min-h-screen bg-center bg-no-repeat px-4 pb-10 pt-28 sm:px-6 sm:pb-14 sm:pt-36 xl:pt-44"
+      className="min-h-screen bg-center bg-no-repeat px-4 pb-10 pt-28 sm:px-6 sm:pb-14 sm:pt-36 lg:pt-52 xl:pt-60"
       style={{
         backgroundImage: `url("${bgForSixteen}")`,
         backgroundSize: "100% 100%",

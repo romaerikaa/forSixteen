@@ -174,7 +174,7 @@ function Vault({ letters, error, isRefreshing, onRefresh, user }) {
   }, [])
 
   return (
-    <section className="vault-enter min-h-screen bg-[#f5f6f0] px-4 pb-10 pt-28 vault-grid sm:px-6 sm:pb-14 sm:pt-36 xl:pt-44">
+    <section className="vault-enter min-h-screen bg-[#f5f6f0] px-4 pb-10 pt-28 vault-grid sm:px-6 sm:pb-14 sm:pt-36 lg:pt-52 xl:pt-60">
       <div className="mx-auto w-full">
         <h1 className="text-center font-mono text-2xl font-black uppercase tracking-[0.16em] text-slate-500 sm:text-3xl sm:tracking-[0.18em]">
           Vault
