@@ -141,7 +141,7 @@ function Gallery({ user }) {
   }
 
   return (
-    <section className="gallery-enter min-h-[calc(100vh-9rem)] bg-[#f5f6f0] px-4 py-8 vault-grid sm:px-6 sm:py-12">
+    <section className="gallery-enter min-h-screen bg-[#f5f6f0] px-4 pb-8 pt-28 vault-grid sm:px-6 sm:pb-12 sm:pt-36 xl:pt-44">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
           <div>

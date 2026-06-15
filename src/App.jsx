@@ -151,18 +151,8 @@ function App() {
 
   return (
     <div className="min-h-screen overflow-x-clip bg-zinc-200">
-      <div className="sticky top-0 z-[9998] bg-[#f5f6f0]">
-        <div className="flex items-center justify-between gap-4 bg-[#f5f6f0] px-4 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500 sm:px-6 sm:text-xs">
-          <span>ForSixteen</span>
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="shrink-0 border border-[#838f58] bg-[#fffdf8] px-3 py-2 text-[#838f58] transition hover:bg-[#f9d1d9]"
-          >
-            Logout
-          </button>
-        </div>
-        <Navbar activeIndex={activePage} onSelect={setActivePage} />
+      <div className="fixed inset-x-0 top-0 z-[9998]">
+        <Navbar activeIndex={activePage} onSelect={setActivePage} onLogout={handleLogout} />
       </div>
       {pages[activePage]}
     </div>

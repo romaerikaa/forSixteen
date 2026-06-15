@@ -162,7 +162,7 @@ function Vault({ letters }) {
   }, [])
 
   return (
-    <section className="vault-enter min-h-[calc(100vh-9rem)] bg-[#eef2f5] px-4 py-10 vault-grid sm:px-6 sm:py-14">
+    <section className="vault-enter min-h-screen bg-[#eef2f5] px-4 pb-10 pt-28 vault-grid sm:px-6 sm:pb-14 sm:pt-36 xl:pt-44">
       <div className="mx-auto w-full">
         <h1 className="text-center font-mono text-2xl font-black uppercase tracking-[0.16em] text-slate-500 sm:text-3xl sm:tracking-[0.18em]">
           Vault

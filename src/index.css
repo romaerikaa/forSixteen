@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
 @import "tailwindcss";
 
 @layer base {
@@ -119,12 +120,148 @@
     animation: login-fade-in 900ms ease both;
   }
 
+  .login-script {
+    font-family: "Pacifico", "Brush Script MT", "Segoe Script", cursive;
+    font-weight: 400;
+    letter-spacing: 0;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.95);
+    text-shadow:
+      0 2px 0 rgba(255, 255, 255, 0.96),
+      0 5px 0 rgba(198, 64, 124, 0.36),
+      0 11px 12px rgba(121, 31, 74, 0.34),
+      0 0 16px rgba(255, 255, 255, 0.7);
+    transform: rotate(-2deg);
+  }
+
+  .login-bg-glow {
+    animation: login-bg-bloom 1400ms ease both, login-bg-drift 9000ms ease-in-out 1400ms infinite alternate;
+    transform-origin: center;
+  }
+
+  .login-grid-shimmer {
+    animation: login-grid-in 1200ms ease 220ms both, login-grid-drift 14000ms linear 1200ms infinite;
+  }
+
+  .login-title-wrap {
+    animation: login-title-arrive 1050ms cubic-bezier(0.16, 0.86, 0.18, 1) 520ms both;
+  }
+
+  .login-card-wrap {
+    animation: login-card-arrive 950ms cubic-bezier(0.16, 0.86, 0.18, 1) 700ms both;
+  }
+
+  .login-ribbon {
+    animation: login-ribbon-arrive 1150ms cubic-bezier(0.16, 0.86, 0.18, 1) 980ms both;
+    transform-origin: 50% 15%;
+  }
+
+  .login-form-pop {
+    animation: login-form-pop 640ms cubic-bezier(0.16, 0.86, 0.18, 1) backwards;
+  }
+
+  .login-delay-1 {
+    animation-delay: 1160ms;
+  }
+
+  .login-delay-2 {
+    animation-delay: 1240ms;
+  }
+
+  .login-delay-3 {
+    animation-delay: 1320ms;
+  }
+
+  .login-delay-4 {
+    animation-delay: 1420ms;
+  }
+
+  .login-delay-5 {
+    animation-delay: 1510ms;
+  }
+
+  .login-delay-6 {
+    animation-delay: 1600ms;
+  }
+
+  .login-star {
+    animation: login-star-arrive 950ms cubic-bezier(0.16, 0.86, 0.18, 1) both;
+    transform-origin: center;
+  }
+
+  .login-star-large {
+    --star-start-x: -5rem;
+    --star-start-y: -4rem;
+    --star-start-rotate: -42deg;
+    --star-end-rotate: -12deg;
+    animation-delay: 120ms;
+  }
+
+  .login-star-medium {
+    --star-start-x: 3rem;
+    --star-start-y: -5rem;
+    --star-start-rotate: 38deg;
+    --star-end-rotate: 3deg;
+    animation-delay: 260ms;
+  }
+
+  .login-star-small {
+    --star-start-x: -4rem;
+    --star-start-y: 3rem;
+    --star-start-rotate: -34deg;
+    --star-end-rotate: 12deg;
+    animation-delay: 390ms;
+  }
+
+  @media (max-width: 639px) {
+    .login-script {
+      text-shadow:
+        0 2px 0 rgba(255, 255, 255, 0.96),
+        0 4px 0 rgba(198, 64, 124, 0.32),
+        0 8px 10px rgba(121, 31, 74, 0.28),
+        0 0 12px rgba(255, 255, 255, 0.68);
+    }
+
+    .login-star-large {
+      --star-start-x: -2.75rem;
+      --star-start-y: -2.5rem;
+    }
+
+    .login-star-small {
+      --star-start-x: -2.5rem;
+      --star-start-y: 1.5rem;
+    }
+  }
+
   .home-intro {
     animation: home-card-in 900ms cubic-bezier(0.16, 0.86, 0.18, 1) both;
   }
 
   .home-links {
     animation: home-card-in 900ms cubic-bezier(0.16, 0.86, 0.18, 1) 180ms both;
+  }
+
+  .home-collage {
+    animation: home-card-in 900ms cubic-bezier(0.16, 0.86, 0.18, 1) 260ms both;
+  }
+
+  .home-photo {
+    overflow: visible;
+    box-shadow:
+      0 10px 20px rgba(71, 85, 105, 0.2),
+      6px 8px 0 rgba(255, 127, 175, 0.18);
+  }
+
+  .home-photo::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    z-index: 2;
+    height: 1.15rem;
+    width: 5.5rem;
+    transform: translate(-50%, -45%) rotate(-3deg);
+    background: rgba(249, 209, 217, 0.82);
+    box-shadow: 0 2px 5px rgba(71, 85, 105, 0.13);
   }
 
   .write-enter {
@@ -233,6 +370,152 @@
 
   to {
     opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes login-bg-bloom {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+    filter: saturate(0.72) blur(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: saturate(1) blur(0);
+  }
+}
+
+@keyframes login-bg-drift {
+  from {
+    transform: scale(1);
+    filter: saturate(1);
+  }
+
+  to {
+    transform: scale(1.025);
+    filter: saturate(1.08);
+  }
+}
+
+@keyframes login-grid-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 0.45;
+    transform: translateY(0);
+  }
+}
+
+@keyframes login-grid-drift {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 38px 38px;
+  }
+}
+
+@keyframes login-title-arrive {
+  0% {
+    opacity: 0;
+    transform: translateX(-4rem) translateY(1.2rem) scale(0.92);
+    filter: blur(5px);
+  }
+
+  72% {
+    opacity: 1;
+    transform: translateX(0.35rem) translateY(0) scale(1.035);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes login-card-arrive {
+  0% {
+    opacity: 0;
+    transform: translateX(2.8rem) translateY(1.6rem) rotate(1.5deg) scale(0.96);
+    filter: blur(5px);
+  }
+
+  74% {
+    opacity: 1;
+    transform: translateX(-0.25rem) translateY(-0.2rem) rotate(-0.35deg) scale(1.015);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes login-ribbon-arrive {
+  0% {
+    opacity: 0;
+    transform: translateY(-2.5rem) rotate(-22deg) scale(0.72);
+    filter: blur(4px);
+  }
+
+  62% {
+    opacity: 1;
+    transform: translateY(0.2rem) rotate(12deg) scale(1.08);
+    filter: blur(0);
+  }
+
+  82% {
+    transform: translateY(-0.15rem) rotate(3deg) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(6deg) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes login-form-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+    filter: blur(3px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes login-star-arrive {
+  0% {
+    opacity: 0;
+    transform: translate(var(--star-start-x), var(--star-start-y)) rotate(var(--star-start-rotate)) scale(0.55);
+    filter: blur(4px);
+  }
+
+  72% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(calc(var(--star-end-rotate) + 8deg)) scale(1.08);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(var(--star-end-rotate)) scale(1);
     filter: blur(0);
   }
 }

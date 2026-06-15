@@ -33,7 +33,7 @@ function Write({ onSave, error }) {
   return (
     <section
       className="
-        write-enter min-h-[calc(100vh-9rem)] px-4 py-8 sm:px-6 sm:py-14
+        write-enter min-h-screen px-4 pb-8 pt-28 sm:px-6 sm:pb-14 sm:pt-36 xl:pt-44
         bg-[#f8f8f8]
         bg-[linear-gradient(#e4e8ec_1px,transparent_1px),
         linear-gradient(90deg,#e4e8ec_1px,transparent_1px)]
