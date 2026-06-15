@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import ribbonImage from "../assets/ribbon.png"
 
@@ -66,8 +66,24 @@ function Write({ onSave, error }) {
   const [draggingStickerId, setDraggingStickerId] = useState("")
   const [isSaving, setIsSaving] = useState(false)
   const paperRef = useRef(null)
+  const letterInputRef = useRef(null)
   const openDate = openDateTime.slice(0, 10)
   const openTime = openDateTime.slice(11, 16)
+
+  function resizeLetterInput() {
+    const input = letterInputRef.current
+
+    if (!input) {
+      return
+    }
+
+    input.style.height = "auto"
+    input.style.height = `${input.scrollHeight}px`
+  }
+
+  useEffect(() => {
+    resizeLetterInput()
+  }, [letter])
 
   function updateOpenDateTime(nextDate, nextTime) {
     if (!nextDate) {
@@ -369,10 +385,11 @@ function Write({ onSave, error }) {
           />
 
           <textarea
+            ref={letterInputRef}
             value={letter}
             onChange={(event) => setLetter(event.target.value)}
             className="
-              relative min-h-[20rem] w-full resize-none bg-transparent
+              relative min-h-[20rem] w-full resize-none overflow-hidden bg-transparent
               font-mono text-base leading-8 text-zinc-800 outline-none
               placeholder:text-zinc-400
               sm:min-h-[24rem] sm:text-lg
