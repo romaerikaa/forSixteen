@@ -78,6 +78,10 @@
     animation: envelope-zoom-open 760ms cubic-bezier(0.16, 0.82, 0.18, 1) both;
   }
 
+  .open-envelope-shell {
+    top: clamp(16rem, 58dvh, 32rem);
+  }
+
   .envelope-flap {
     background: linear-gradient(145deg, #e2b7c1, #f7d4dc);
     clip-path: polygon(0 0, 100% 0, 50% 100%);

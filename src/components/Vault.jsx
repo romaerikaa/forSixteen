@@ -211,7 +211,7 @@ function OpenEnvelope({ letter, onClose }) {
           ×
         </button>
 
-        <div className="envelope-shell envelope-shell-open absolute bottom-4 left-1/2 z-20 aspect-[16/10] w-[min(86%,28rem)] -translate-x-1/2 bg-[#e8c4cc] shadow-[8px_10px_0_rgba(148,163,184,0.45),0_18px_40px_rgba(71,85,105,0.22)] sm:bottom-8 sm:w-[min(72%,42rem)] sm:shadow-[12px_14px_0_rgba(148,163,184,0.45),0_24px_55px_rgba(71,85,105,0.22)]">
+        <div className="open-envelope-shell envelope-shell envelope-shell-open absolute left-1/2 z-20 aspect-[16/10] w-[min(86%,28rem)] -translate-x-1/2 bg-[#e8c4cc] shadow-[8px_10px_0_rgba(148,163,184,0.45),0_18px_40px_rgba(71,85,105,0.22)] sm:w-[min(72%,42rem)] sm:shadow-[12px_14px_0_rgba(148,163,184,0.45),0_24px_55px_rgba(71,85,105,0.22)]">
           <div className="envelope-flap envelope-flap-open absolute inset-x-0 top-0 z-50 h-1/2" />
           <div className="absolute inset-y-0 left-0 w-1/2 bg-[#e4bbc4] [clip-path:polygon(0_0,100%_50%,0_100%)]" />
           <div className="absolute inset-y-0 right-0 w-1/2 bg-[#e4bbc4] [clip-path:polygon(100%_0,0_50%,100%_100%)]" />
