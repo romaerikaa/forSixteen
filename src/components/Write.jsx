@@ -66,6 +66,7 @@ function Write({ onSave, error }) {
   const [draggingStickerId, setDraggingStickerId] = useState("")
   const [isSaving, setIsSaving] = useState(false)
   const paperRef = useRef(null)
+  const letterSurfaceRef = useRef(null)
   const letterInputRef = useRef(null)
   const openDate = openDateTime.slice(0, 10)
   const openTime = openDateTime.slice(11, 16)
@@ -99,7 +100,7 @@ function Write({ onSave, error }) {
   }
 
   function getStickerPosition(event) {
-    const paper = paperRef.current
+    const paper = letterSurfaceRef.current
 
     if (!paper) {
       return { x: 50, y: 50 }
@@ -121,8 +122,9 @@ function Write({ onSave, error }) {
       {
         id: crypto.randomUUID(),
         emoji,
+        space: "letter",
         x: clamp(48 + currentStickers.length * 5, 10, 90),
-        y: clamp(34 + currentStickers.length * 5, 12, 88),
+        y: clamp(18 + currentStickers.length * 5, 8, 92),
       },
     ])
   }
@@ -170,7 +172,7 @@ function Write({ onSave, error }) {
       text: trimmedLetter,
       openDate: "",
       openAt: openDateTime ? new Date(openDateTime).toISOString() : "",
-      stickers,
+      stickers: stickers.map((sticker) => ({ ...sticker, space: "letter" })),
     })
     setIsSaving(false)
 
@@ -371,56 +373,58 @@ function Write({ onSave, error }) {
             </p>
           )}
 
-          <input
-            type="text"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-            className="
-              relative mb-2 w-full bg-transparent font-mono text-xl
-              font-black uppercase tracking-[0.1em] text-[#838f58]
-              outline-none placeholder:text-[#838f58]/45
-              sm:text-2xl sm:tracking-[0.14em]
-            "
-            placeholder="Letter title"
-          />
+          <div ref={letterSurfaceRef} className="relative">
+            <input
+              type="text"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              className="
+                relative mb-2 w-full bg-transparent font-mono text-xl
+                font-black uppercase tracking-[0.1em] text-[#838f58]
+                outline-none placeholder:text-[#838f58]/45
+                sm:text-2xl sm:tracking-[0.14em]
+              "
+              placeholder="Letter title"
+            />
 
-          <textarea
-            ref={letterInputRef}
-            value={letter}
-            onChange={(event) => setLetter(event.target.value)}
-            className="
-              relative min-h-[20rem] w-full resize-none overflow-hidden bg-transparent
-              font-mono text-base leading-8 text-zinc-800 outline-none
-              placeholder:text-zinc-400
-              sm:min-h-[24rem] sm:text-lg
-            "
-            placeholder="Start writing here..."
-          />
+            <textarea
+              ref={letterInputRef}
+              value={letter}
+              onChange={(event) => setLetter(event.target.value)}
+              className="
+                relative min-h-[20rem] w-full resize-none overflow-hidden bg-transparent
+                font-mono text-base leading-8 text-zinc-800 outline-none
+                placeholder:text-zinc-400
+                sm:min-h-[24rem] sm:text-lg
+              "
+              placeholder="Start writing here..."
+            />
 
-          <div className="pointer-events-none absolute inset-0 z-30">
-            {stickers.map((sticker) => (
-              <button
-                key={sticker.id}
-                type="button"
-                onPointerDown={(event) => handleStickerPointerDown(sticker.id, event)}
-                onPointerUp={stopDragging}
-                onPointerCancel={stopDragging}
-                onDoubleClick={() =>
-                  setStickers((currentStickers) =>
-                    currentStickers.filter((currentSticker) => currentSticker.id !== sticker.id),
-                  )
-                }
-                className="
-                  pointer-events-auto absolute flex h-12 w-12 -translate-x-1/2 -translate-y-1/2
-                  touch-none select-none items-center justify-center text-4xl drop-shadow-[0_5px_4px_rgba(15,23,42,0.22)]
-                  transition hover:scale-110 sm:h-14 sm:w-14 sm:text-5xl
-                "
-                style={{ left: `${sticker.x}%`, top: `${sticker.y}%` }}
-                aria-label={`Move ${sticker.emoji} sticker`}
-              >
-                {sticker.emoji}
-              </button>
-            ))}
+            <div className="pointer-events-none absolute inset-0 z-30">
+              {stickers.map((sticker) => (
+                <button
+                  key={sticker.id}
+                  type="button"
+                  onPointerDown={(event) => handleStickerPointerDown(sticker.id, event)}
+                  onPointerUp={stopDragging}
+                  onPointerCancel={stopDragging}
+                  onDoubleClick={() =>
+                    setStickers((currentStickers) =>
+                      currentStickers.filter((currentSticker) => currentSticker.id !== sticker.id),
+                    )
+                  }
+                  className="
+                    pointer-events-auto absolute flex h-12 w-12 -translate-x-1/2 -translate-y-1/2
+                    touch-none select-none items-center justify-center text-4xl drop-shadow-[0_5px_4px_rgba(15,23,42,0.22)]
+                    transition hover:scale-110 sm:h-14 sm:w-14 sm:text-5xl
+                  "
+                  style={{ left: `${sticker.x}%`, top: `${sticker.y}%` }}
+                  aria-label={`Move ${sticker.emoji} sticker`}
+                >
+                  {sticker.emoji}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

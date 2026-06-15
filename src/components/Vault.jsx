@@ -1,6 +1,24 @@
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max)
+}
+
+function getLetterStickerPosition(sticker) {
+  if (sticker.space === "letter") {
+    return {
+      x: sticker.x,
+      y: sticker.y,
+    }
+  }
+
+  return {
+    x: sticker.x,
+    y: clamp(sticker.y - 18, 4, 96),
+  }
+}
+
 function EnvelopeLetter({ letter, onOpen, currentTime }) {
   const today = new Date(currentTime).toISOString().slice(0, 10)
   const canOpen =
@@ -149,23 +167,29 @@ function OpenEnvelope({ letter, onClose }) {
           <div className="letter-paper saved-letter-paper relative min-h-[30rem] w-full max-w-6xl bg-[#fbfaf5] px-5 py-7 shadow-[0_18px_45px_rgba(75,85,99,0.18)] sm:min-h-[34rem] sm:px-14 sm:py-10">
             <div className="absolute left-0 right-0 top-0 h-10 bg-gradient-to-b from-white/70 to-transparent" />
             <div className="absolute bottom-0 left-4 top-0 w-px bg-[#f9b8c4] sm:left-9" />
-            <h2 className="letter-words relative z-10 mb-2 break-words font-mono text-xl font-black uppercase tracking-[0.1em] text-[#838f58] sm:text-2xl sm:tracking-[0.14em]">
-              {letter.title || "Untitled Letter"}
-            </h2>
-            <p className="letter-words relative z-10 min-h-[20rem] whitespace-pre-wrap break-words font-mono text-base leading-8 text-zinc-800 sm:min-h-[24rem] sm:text-lg">
-              {letter.text}
-            </p>
-            <div className="letter-words pointer-events-none absolute inset-0 z-20">
-              {(letter.stickers || []).map((sticker) => (
-                <span
-                  key={sticker.id}
-                  className="absolute -translate-x-1/2 -translate-y-1/2 select-none text-4xl drop-shadow-[0_5px_4px_rgba(15,23,42,0.22)] sm:text-5xl"
-                  style={{ left: `${sticker.x}%`, top: `${sticker.y}%` }}
-                  aria-hidden="true"
-                >
-                  {sticker.emoji}
-                </span>
-              ))}
+            <div className="relative">
+              <h2 className="letter-words relative z-10 mb-2 break-words font-mono text-xl font-black uppercase tracking-[0.1em] text-[#838f58] sm:text-2xl sm:tracking-[0.14em]">
+                {letter.title || "Untitled Letter"}
+              </h2>
+              <p className="letter-words relative z-10 min-h-[20rem] whitespace-pre-wrap break-words font-mono text-base leading-8 text-zinc-800 sm:min-h-[24rem] sm:text-lg">
+                {letter.text}
+              </p>
+              <div className="letter-words pointer-events-none absolute inset-0 z-20">
+                {(letter.stickers || []).map((sticker) => {
+                  const position = getLetterStickerPosition(sticker)
+
+                  return (
+                    <span
+                      key={sticker.id}
+                      className="absolute -translate-x-1/2 -translate-y-1/2 select-none text-4xl drop-shadow-[0_5px_4px_rgba(15,23,42,0.22)] sm:text-5xl"
+                      style={{ left: `${position.x}%`, top: `${position.y}%` }}
+                      aria-hidden="true"
+                    >
+                      {sticker.emoji}
+                    </span>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </div>
