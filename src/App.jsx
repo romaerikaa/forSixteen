@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 
 import About from "./components/About"
 import Footer from "./components/Footer"
+import FirstVisitNotice from "./components/FirstVisitNotice"
 import Login from "./components/Login"
 import Navbar from "./components/Navbar"
 import ForSixteen from "./components/forsixteen"
@@ -45,6 +46,9 @@ function createLocalLetter({ title, text, openDate, openAt, stickers }) {
 
 function App() {
   const [hasSeenSplash, setHasSeenSplash] = useState(false)
+  const [showFirstVisitNotice, setShowFirstVisitNotice] = useState(() => {
+    return localStorage.getItem("forsixteen-stargirl-notice-seen") !== "true"
+  })
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("forsixteen-user")
     return savedUser ? JSON.parse(savedUser) : null
@@ -153,6 +157,15 @@ function App() {
     setActivePage(0)
   }
 
+  function handleDismissFirstVisitNotice() {
+    localStorage.setItem("forsixteen-stargirl-notice-seen", "true")
+    setShowFirstVisitNotice(false)
+  }
+
+  const firstVisitNotice = user?.id === "stargirl" && showFirstVisitNotice ? (
+    <FirstVisitNotice onDismiss={handleDismissFirstVisitNotice} />
+  ) : null
+
   if (!user && !hasSeenSplash) {
     return <Splash onContinue={() => setHasSeenSplash(true)} />
   }
@@ -168,6 +181,7 @@ function App() {
       </div>
       {pages[activePage]}
       <Footer />
+      {firstVisitNotice}
     </div>
   )
 }
