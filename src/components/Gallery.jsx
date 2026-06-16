@@ -69,6 +69,16 @@ function createLocalMemory({ mediaUrl, mediaType, title, caption }) {
   }
 }
 
+function getAccountNames(user) {
+  return Array.from(
+    new Set([user.id, user.name, user.id?.toLowerCase(), user.name?.toLowerCase()].filter(Boolean)),
+  )
+}
+
+function getSharedGalleryAccountNames(user) {
+  return Array.from(new Set([...getAccountNames(user), "stargirl", "Roam", "roam"]))
+}
+
 function Gallery({ user }) {
   const [memories, setMemories] = useState([])
   const [title, setTitle] = useState("")
@@ -91,7 +101,7 @@ function Gallery({ user }) {
       const { data, error } = await supabase
         .from("gallery_memories")
         .select("*")
-        .eq("account_name", user.id)
+        .in("account_name", getSharedGalleryAccountNames(user))
         .order("created_at", { ascending: false })
 
       if (error) {
